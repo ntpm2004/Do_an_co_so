@@ -1,0 +1,157 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+    color: #002855;
+}
+
+.logo img {
+    height: 50px;
+}
+
+h1 {
+    font-size: 25px;
+    margin: 0; /* Xóa khoảng cách margin mặc định của h1 */
+    flex-grow: 1; /* Chiếm không gian còn lại để căn giữa */
+    text-align: center; /* Căn giữa văn bản */
+}
+
+.year-select {
+    margin-right: 10px; /* Khoảng cách giữa select và button */
+}
+
+.year-select select {
+    padding: 8px 10px;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+.action-container {
+    display: flex;
+    align-items: center; /* Đảm bảo button và select được căn theo hàng ngang */
+}
+
+.signout-button button {
+    background-color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px; /* Khoảng cách giữa select và button */
+}
+
+main {
+    padding: 20px;
+}
+
+.admin-section{
+    width: 10%;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.filter-section {
+    background-color: white;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-inline: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.filter-section h2 {
+    margin-bottom: 15px;
+}
+
+.filter-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding-top: 5px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 48%;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 10px;
+}
+
+.apply-btn, .reset-btn {
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.apply-btn {
+    background-color: #002855;
+    color: white;
+}
+
+.reset-btn {
+    background-color: white;
+    border: 1px solid #ddd;
+}
+
+.table-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f4f4f4;
+}

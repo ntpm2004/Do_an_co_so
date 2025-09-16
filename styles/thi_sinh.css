@@ -1,0 +1,254 @@
+* {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url("./pictures1/back.jpg");
+            background-size: cover;
+            color: #333;
+        }
+		.overlay {
+    		position: fixed;
+    		top: 0;
+    		left: 0;
+    		right: 0;
+    		bottom: 0;
+    		background: rgba(255, 255, 255, 0.5);
+    		z-index: 1;
+    		display: none; /* Ẩn khi không cần thiết */
+		}
+		header {
+    		display: flex;
+    		justify-content: space-between;
+    		align-items: center;
+    		background: #003366;
+    		color: white;
+   		 	padding: 10px 20px;
+    		position: fixed;
+    		top: 0; 
+    		left: 0;
+    		right: 0;
+    		z-index: 2; /* Hiển thị header trên lớp phủ */
+		}
+		.logo img {
+    		height: 50px; /* Kích thước logo */
+		}
+		nav {
+    		padding: 5px;
+    		text-align: right;
+		}
+		nav a {
+    		color: white;
+    		margin: 0 10px;
+    		text-decoration: none;
+    		cursor: pointer; /* Thay đổi con trỏ khi hover */
+		}
+	    .form-container {
+    	   max-width: 1000px; /* Độ rộng tối đa */
+           margin: 0 auto; /* Canh giữa */
+ 	       padding: 20px; /* Khoảng cách bên trong */
+	       border: 1px solid #ffffff; /* Đường viền */
+  	       border-radius: 5px; /* Bo góc */
+ 	       background-color: #f9f9f9a0; /* Màu nền */
+		   padding-top: 90px;
+		    
+        }
+		.form-container1 {
+    	   max-width: 1000px; /* Độ rộng tối đa */
+           margin: 0 auto; /* Canh giữa */
+ 	       padding: 20px; /* Khoảng cách bên trong */
+	       border: 1px solid #ffffff; /* Đường viền */
+  	       border-radius: 5px; /* Bo góc */
+ 	       background-color: #f9f9f9a0; /* Màu nền */
+        }
+        .header {
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 25px;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .form-group {
+            flex: 1;
+            margin-right: 10px;
+            min-width: 200px;
+            margin-bottom: 15px;
+        }
+
+        .form-group:last-child {
+            margin-right: 0;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid black;
+            background-color: #f9f9f9;
+            color: black;
+        }
+
+        input:invalid {
+            border-color: black;
+        }
+
+        input:required:focus, select:focus {
+            outline: none;
+            border: 2px solid blue;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+	    .save-button, .add-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .delete-button {
+            color: red;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+
+        .required {
+            color: red;
+            font-size: 18px;
+        }
+		.container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="number"] {
+            width: 80%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            flex-direction: column;
+        }
+		.container1 {
+            max-width: 900px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 0 auto;
+        }
+		.section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .input-group {
+            margin-top: 10px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .select-group {
+            display: flex;
+            justify-content: space-between;
+        }
+		.message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+        #logoutBtn{
+            background: #ff5722; 
+            color: white; 
+            padding: 5px 10px; 
+            border-radius: 4px;
+        }
+        .image-preview img {
+            width: 200px; /* Kích thước ảnh có thể điều chỉnh */
+            height: auto;
+            margin-top: 10px; /* Khoảng cách giữa input và ảnh */
+        }
+		.footer {
+    		display: flex;
+    		align-items: center;
+    		justify-content: center;
+    		padding: 20px;
+    		background-color: #fff;
+    		flex-direction: column;
+		}
+		.footer .logo {
+    		margin-right: 20px;
+		}
+		.footer img {
+    		max-width: 1000px;
+    		margin-bottom: 10px;
+		}
+		.footer p {
+    		margin: 5px 0;
+    		text-align: center;
+		}
+		.footer .icon {
+    		margin-right: 5px;
+		}

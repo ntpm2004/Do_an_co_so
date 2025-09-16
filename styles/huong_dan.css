@@ -1,0 +1,146 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #002855;
+    color: white;
+    padding: 20px;
+}
+
+.logo img {
+    height: 50px; /* Kích thước logo */
+}
+
+nav {
+    padding: 5px;
+    text-align: center;
+}
+
+nav a {
+    font-weight: bolder;
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+    cursor: pointer; /* Thay đổi con trỏ khi hover */
+}
+
+nav a :hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+}
+
+.hero {
+    background: url('pictures1/back.jpg') no-repeat center center;
+    background-size:auto;
+    padding: 100px 100px;
+    text-align: center;
+    color: white;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.services {
+    display: block;
+    justify-content: space-between; /* Đảm bảo các thẻ service cách đều nhau */
+    padding: 0 10px; /* Thêm khoảng đệm từ hai lề trái và phải */
+
+}
+
+.artists {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.service {
+    background-color: #e6ecf5;
+    padding: 15px;
+    margin: 10px 0; /* Giữ khoảng cách giữa các thẻ theo chiều dọc */
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    max-width: max-content; /* Đặt giới hạn chiều rộng tối đa cho các thẻ */
+    box-sizing: border-box; /* Đảm bảo padding không làm vượt quá kích thước khung */
+}
+
+.artist {
+    background-color: #e7e5e5;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 5px;
+    flex: 1 1 30%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.service img {
+    width: 95%;
+    height: auto;
+    padding-left: 20px;
+    border-radius: 10px;
+}
+.service a{
+    font-weight: bold;
+    color: rgb(253, 135, 0);
+    text-decoration: none;
+}
+
+.service a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    display: flex; /* Dùng flex để bố trí các phần tử */
+    justify-content: center; /* Đảm bảo nội dung content nằm giữa */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    background-color: #002855;
+    color: white;
+    padding: 10px 30px;
+    position: relative; /* Để điều chỉnh vị trí của logo */
+}
+
+.footer-content {
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc cho cả logo và nội dung */
+    width: 100%;
+    justify-content: center; /* Đảm bảo nội dung content nằm giữa */
+    position: relative;
+}
+
+.footer-content .logo {
+    position: absolute; /* Để đặt logo ở góc trái */
+    left: 30px; /* Căn chỉnh khoảng cách logo từ bên trái */
+    display: flex;
+    align-items: center;
+}
+
+.footer-content .logo img {
+    height: 60px; /* Đặt chiều cao cho logo */
+}
+
+.footer-content .content {
+    text-align: center; /* Căn giữa nội dung */
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

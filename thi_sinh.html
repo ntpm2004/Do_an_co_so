@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Đăng kí xét tuyển </title>
+    <link rel="stylesheet" href="./styles/thi_sinh.css">
+	<link rel="icon" href ="./styles/pictures1/logo3.jpg" type ="image/jpeg">
+</head>
+<body>
+	<div class="overlay"></div> <!-- Lớp phủ màu mờ -->
+
+	<header>
+		<div class="logo">
+			<img src="./styles/pictures1/logo1.jpg" alt="Logo"> 
+		</div>
+		<nav>
+			<a href="#">Hướng dẫn đăng ký</a>
+			<a href="#">Tin tức</a>
+			<a href="#">Đăng ký xét tuyển</a>
+			<div id="userName" style="display: none;"></div> <!-- Thay span bằng div -->
+			<a href="./index.html" id="logoutBtn">Đăng xuất</a>
+		</nav>
+	</header>			
+    <div class="form-container">
+		<div class="container">
+        <form id="thong_tin_ca_nhan">
+        <h1>Nhập thông tin cá nhân</h1>
+            <div class = "form-row">
+            <div class="form-group">
+                <label for="name">Họ và tên <span class="required">*</span> :</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Ngày tháng năm sinh <span class="required">*</span> :</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Giới tính <span class="required">*</span> :</label>
+                <select id="gender" name="gender" required>
+                    <option value="">Chọn giới tính</option>
+                    <option value="male">Nam</option>
+                    <option value="female">Nữ</option>
+                    <option value="other">Khác</option>
+                </select>
+            </div>
+            </div>
+        
+            <div class="form-group">
+                <label for="email">Email <span class="required">*</span> :</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="ethnicity">Dân tộc <span class="required">*</span> :</label>
+                <select id="ethnicity" name="ethnicity" required>
+                    <option value="">Chọn dân tộc</option>
+                    <option value="kinh">Kinh</option>
+                    <option value="tay">Tày</option>
+                    <option value="thai">Thái</option>
+                    <option value="muong">Mường</option>
+                    <option value="khmer">Khmer</option>
+                    <option value="hoa">Hoa</option>
+                    <option value="nung">Nùng</option>
+                    <option value="hmong">H'Mông</option>
+                    <option value="dao">Dao</option>
+                    <option value="ede">Ê Đê</option>
+                    <option value="bana">Ba Na</option>
+                    <option value="cham">Chăm</option>
+                    <option value="sandiu">Sán Dìu</option>
+                    <option value="other">Khác</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="religion">Tôn giáo <span class="required">*</span> :</label>
+                <select id="religion" name="religion" required>
+                    <option value="">Chọn tôn giáo</option>
+                    <option value="no">Không</option>
+                    <option value="phat">Phật giáo</option>
+                    <option value="cong">Công giáo</option>
+                    <option value="hoa">Hòa Hảo</option>
+                    <option value="tin">Tin Lành</option>
+                    <option value="cao">Cao Đài</option>
+                    <option value="hồi">Hồi giáo</option>
+                    <option value="other">Khác</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="identity">Số CCCD <span class="required">*</span> :</label>
+                    <input type="text" id="identity" name="identity" pattern="^\d{12}$" required title="Số CCCD phải gồm 12 chữ số.">
+                </div>
+                <div class="form-group">
+                    <label for="issueDate">Ngày cấp <span class="required">*</span> :</label>
+                    <input type="date" id="issueDate" name="issueDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="issuedBy">Nơi cấp <span class="required">*</span> :</label>
+                    <input type="text" id="issuedBy" name="issuedBy" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address">Địa chỉ liên hệ <span class="required">*</span> :</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group" id="phone">
+                    <label for="studentPhone">Số điện thoại thí sinh <span class="required">*</span> :</label>
+                    <input type="tel" id="studentPhone" name="studentPhone" pattern="^\d{10}$" required title="Số điện thoại phải gồm 10 chữ số.">
+                </div>
+                <div class="form-group">
+                    <label for="parentPhone">Số điện thoại bố/mẹ <span class="required">*</span> :</label>
+                    <input type="tel" id="parentPhone" name="parentPhone" pattern="^\d{10}$" required title="Số điện thoại phải gồm 10 chữ số.">
+                </div>
+            </div>
+	        <div class="form-group">
+                <label for="provinceCode">Mã tỉnh/thành phố:</label>
+                <input type="text" id="provinceCode" name="provinceCode" required readonly>
+            </div>
+
+            <div class="form-group">
+    		<label for="province">Tỉnh/Thành phố thường trú <span class="required">*</span> :</label>
+    		<select id="province" name="province" required>
+       	 	   <option value="">Chọn tỉnh/thành phố</option>
+       			<option value="An Giang">An Giang</option>
+        		<option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+        		<option value="Bạc Liêu">Bạc Liêu</option>
+        		<option value="Bắc Giang">Bắc Giang</option>
+        		<option value="Bắc Kạn">Bắc Kạn</option>
+        		<option value="Bắc Ninh">Bắc Ninh</option>
+        		<option value="Bến Tre">Bến Tre</option>
+        		<option value="Bình Định">Bình Định</option>
+        		<option value="Bình Dương">Bình Dương</option>
+        		<option value="Bình Phước">Bình Phước</option>
+        		<option value="Cà Mau">Cà Mau</option>
+        		<option value="Cao Bằng">Cao Bằng</option>
+        		<option value="Cần Thơ">Cần Thơ</option>
+        		<option value="Đà Nẵng">Đà Nẵng</option>
+        		<option value="Đắk Lắk">Đắk Lắk</option>
+        		<option value="Đắk Nông">Đắk Nông</option>
+        		<option value="Điện Biên">Điện Biên</option>
+        		<option value="Đồng Nai">Đồng Nai</option>
+        		<option value="Đồng Tháp">Đồng Tháp</option>
+        		<option value="Gia Lai">Gia Lai</option>
+        		<option value="Hà Giang">Hà Giang</option>
+        		<option value="Hà Nam">Hà Nam</option>
+        		<option value="Hà Nội">Hà Nội</option>
+        		<option value="Hải Dương">Hải Dương</option>
+        		<option value="Hải Phòng">Hải Phòng</option>
+        		<option value="Hà Tĩnh">Hà Tĩnh</option>
+        		<option value="Hậu Giang">Hậu Giang</option>
+        		<option value="Hòa Bình">Hòa Bình</option>
+        		<option value="Hồ Chí Minh">Hồ Chí Minh</option>
+        		<option value="Hưng Yên">Hưng Yên</option>
+        		<option value="Khánh Hòa">Khánh Hòa</option>
+        		<option value="Kiên Giang">Kiên Giang</option>
+        		<option value="Kon Tum">Kon Tum</option>
+        		<option value="Lai Châu">Lai Châu</option>
+        		<option value="Lâm Đồng">Lâm Đồng</option>
+        		<option value="Lào Cai">Lào Cai</option>
+        		<option value="Lạng Sơn">Lạng Sơn</option>
+        		<option value="Long An">Long An</option>
+        		<option value="Nam Định">Nam Định</option>
+        		<option value="Nghệ An">Nghệ An</option>
+        		<option value="Ninh Bình">Ninh Bình</option>
+        		<option value="Ninh Thuận">Ninh Thuận</option>
+        		<option value="Phú Thọ">Phú Thọ</option>
+        		<option value="Phú Yên">Phú Yên</option>
+        		<option value="Quảng Bình">Quảng Bình</option>
+        		<option value="Quảng Nam">Quảng Nam</option>
+        		<option value="Quảng Ngãi">Quảng Ngãi</option>
+        		<option value="Quảng Ninh">Quảng Ninh</option>
+        		<option value="Sóc Trăng">Sóc Trăng</option>
+        		<option value="Sơn La">Sơn La</option>
+        		<option value="Tây Ninh">Tây Ninh</option>
+        		<option value="Thái Bình">Thái Bình</option>
+        		<option value="Thái Nguyên">Thái Nguyên</option>
+        		<option value="Trà Vinh">Trà Vinh</option>
+        		<option value="Thanh Hóa">Thanh Hóa</option>
+       			<option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+        		<option value="Tiền Giang">Tiền Giang</option>
+        		<option value="Tuyên Quang">Tuyên Quang</option>
+        		<option value="Vĩnh Long">Vĩnh Long</option>
+        		<option value="Vĩnh Phúc">Vĩnh Phúc</option>
+        		<option value="Yên Bái">Yên Bái</option>
+               </select>
+	        </div>            
+            <div class="form-group">
+                <label for="district">Quận/Huyện thường trú <span class="required">*</span> :</label>
+                <select id="district" name="district" required>
+                <option value="">Chọn quận/huyện</option>
+                </select>
+            </div>
+            <div class = "form-row">
+            <div class="form-group">
+                <label for="ward">Xã/Phường/Thị trấn <span class="required">*</span> :</label>
+                <input type="text" id="ward" name="ward" required>
+            </div>
+            <div class="form-group">
+                <label for="village">Số nhà, Thôn <span class="required">*</span> :</label>
+                <input type="text" id="village" name="village" required>
+            </div>
+            </div>
+            <h3>Trường học lớp 10</h3>
+        	   <div class="form-row">
+                <div class="form-group">
+                 <label for="schoolProvince10">Tỉnh/Thành phố trường học <span class="required">*</span> :</label>
+                 <select id="schoolProvince10" name="schoolProvince10" required>
+                    <option value="">Chọn tỉnh/thành phố</option>       			
+			<option value="An Giang">An Giang</option>
+        		<option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+        		<option value="Bạc Liêu">Bạc Liêu</option>
+        		<option value="Bắc Giang">Bắc Giang</option>
+        		<option value="Bắc Kạn">Bắc Kạn</option>
+        		<option value="Bắc Ninh">Bắc Ninh</option>
+        		<option value="Bến Tre">Bến Tre</option>
+        		<option value="Bình Định">Bình Định</option>
+        		<option value="Bình Dương">Bình Dương</option>
+        		<option value="Bình Phước">Bình Phước</option>
+        		<option value="Cà Mau">Cà Mau</option>
+        		<option value="Cao Bằng">Cao Bằng</option>
+        		<option value="Cần Thơ">Cần Thơ</option>
+        		<option value="Đà Nẵng">Đà Nẵng</option>
+        		<option value="Đắk Lắk">Đắk Lắk</option>
+        		<option value="Đắk Nông">Đắk Nông</option>
+        		<option value="Điện Biên">Điện Biên</option>
+        		<option value="Đồng Nai">Đồng Nai</option>
+        		<option value="Đồng Tháp">Đồng Tháp</option>
+        		<option value="Gia Lai">Gia Lai</option>
+        		<option value="Hà Giang">Hà Giang</option>
+        		<option value="Hà Nam">Hà Nam</option>
+        		<option value="Hà Nội">Hà Nội</option>
+        		<option value="Hải Dương">Hải Dương</option>
+        		<option value="Hải Phòng">Hải Phòng</option>
+        		<option value="Hà Tĩnh">Hà Tĩnh</option>
+        		<option value="Hậu Giang">Hậu Giang</option>
+        		<option value="Hòa Bình">Hòa Bình</option>
+        		<option value="Hồ Chí Minh">Hồ Chí Minh</option>
+        		<option value="Hưng Yên">Hưng Yên</option>
+        		<option value="Khánh Hòa">Khánh Hòa</option>
+        		<option value="Kiên Giang">Kiên Giang</option>
+        		<option value="Kon Tum">Kon Tum</option>
+        		<option value="Lai Châu">Lai Châu</option>
+        		<option value="Lâm Đồng">Lâm Đồng</option>
+        		<option value="Lào Cai">Lào Cai</option>
+        		<option value="Lạng Sơn">Lạng Sơn</option>
+        		<option value="Long An">Long An</option>
+        		<option value="Nam Định">Nam Định</option>
+        		<option value="Nghệ An">Nghệ An</option>
+        		<option value="Ninh Bình">Ninh Bình</option>
+        		<option value="Ninh Thuận">Ninh Thuận</option>
+        		<option value="Phú Thọ">Phú Thọ</option>
+        		<option value="Phú Yên">Phú Yên</option>
+        		<option value="Quảng Bình">Quảng Bình</option>
+        		<option value="Quảng Nam">Quảng Nam</option>
+        		<option value="Quảng Ngãi">Quảng Ngãi</option>
+        		<option value="Quảng Ninh">Quảng Ninh</option>
+        		<option value="Sóc Trăng">Sóc Trăng</option>
+        		<option value="Sơn La">Sơn La</option>
+        		<option value="Tây Ninh">Tây Ninh</option>
+        		<option value="Thái Bình">Thái Bình</option>
+        		<option value="Thái Nguyên">Thái Nguyên</option>
+        		<option value="Trà Vinh">Trà Vinh</option>
+        		<option value="Thanh Hóa">Thanh Hóa</option>
+       			<option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+        		<option value="Tiền Giang">Tiền Giang</option>
+        		<option value="Tuyên Quang">Tuyên Quang</option>
+        		<option value="Vĩnh Long">Vĩnh Long</option>
+        		<option value="Vĩnh Phúc">Vĩnh Phúc</option>
+        		<option value="Yên Bái">Yên Bái</option>
+
+               </select>
+            </div>
+            <div class="form-group">
+                <label for="schoolName10">Trường học <span class="required">*</span> :</label>
+                <input type="text" id="schoolName10" name="schoolName10" required>
+            </div>
+	   </div>
+	   <div class="form-row">
+	     <div class="form-group">
+                    <label for="schoolProvinceCode10">Mã tỉnh/TP trường học:</label>
+                    <input type="text" id="schoolProvinceCode10" name="schoolProvinceCode10" required readonly>
+                </div>
+	    <div class="form-group">
+    		<label for="schoolCode10">Mã trường <span class="required">*</span>:</label>
+   	        <input type="text" id="schoolCode10" name="schoolCode10" required>
+            </div>
+	    <div class="form-group">
+                    <label for="schoolDistrict10">Quận/Huyện trường học <span class="required">*</span> :</label>
+                    <select id="schoolDistrict10" name="schoolDistrict10" required>
+                        <option value="">Chọn quận/huyện</option>
+                    </select>
+                </div>
+	    <div class="form-group">
+    		<label for="districtCode10">Mã quận/huyện <span class="required">*</span> :</label>
+    		<input type="text" id="districtCode10" name="districtCode10" required>
+	   </div>
+	 </div>
+    
+	<h3>Trường học lớp 11</h3>
+       
+	   <div class="form-row">
+            <div class="form-group">
+                <label for="schoolProvince11">Tỉnh/Thành phố trường học <span class="required">*</span> :</label>
+                 <select id="schoolProvince11" name="schoolProvince11" required>
+                  <option value="">Chọn tỉnh/thành phố</option>
+       			<option value="An Giang">An Giang</option>
+        		<option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+        		<option value="Bạc Liêu">Bạc Liêu</option>
+        		<option value="Bắc Giang">Bắc Giang</option>
+        		<option value="Bắc Kạn">Bắc Kạn</option>
+        		<option value="Bắc Ninh">Bắc Ninh</option>
+        		<option value="Bến Tre">Bến Tre</option>
+        		<option value="Bình Định">Bình Định</option>
+        		<option value="Bình Dương">Bình Dương</option>
+        		<option value="Bình Phước">Bình Phước</option>
+        		<option value="Cà Mau">Cà Mau</option>
+        		<option value="Cao Bằng">Cao Bằng</option>
+        		<option value="Cần Thơ">Cần Thơ</option>
+        		<option value="Đà Nẵng">Đà Nẵng</option>
+        		<option value="Đắk Lắk">Đắk Lắk</option>
+        		<option value="Đắk Nông">Đắk Nông</option>
+        		<option value="Điện Biên">Điện Biên</option>
+        		<option value="Đồng Nai">Đồng Nai</option>
+        		<option value="Đồng Tháp">Đồng Tháp</option>
+        		<option value="Gia Lai">Gia Lai</option>
+        		<option value="Hà Giang">Hà Giang</option>
+        		<option value="Hà Nam">Hà Nam</option>
+        		<option value="Hà Nội">Hà Nội</option>
+        		<option value="Hải Dương">Hải Dương</option>
+        		<option value="Hải Phòng">Hải Phòng</option>
+        		<option value="Hà Tĩnh">Hà Tĩnh</option>
+        		<option value="Hậu Giang">Hậu Giang</option>
+        		<option value="Hòa Bình">Hòa Bình</option>
+        		<option value="Hồ Chí Minh">Hồ Chí Minh</option>
+        		<option value="Hưng Yên">Hưng Yên</option>
+        		<option value="Khánh Hòa">Khánh Hòa</option>
+        		<option value="Kiên Giang">Kiên Giang</option>
+        		<option value="Kon Tum">Kon Tum</option>
+        		<option value="Lai Châu">Lai Châu</option>
+        		<option value="Lâm Đồng">Lâm Đồng</option>
+        		<option value="Lào Cai">Lào Cai</option>
+        		<option value="Lạng Sơn">Lạng Sơn</option>
+        		<option value="Long An">Long An</option>
+        		<option value="Nam Định">Nam Định</option>
+        		<option value="Nghệ An">Nghệ An</option>
+        		<option value="Ninh Bình">Ninh Bình</option>
+        		<option value="Ninh Thuận">Ninh Thuận</option>
+        		<option value="Phú Thọ">Phú Thọ</option>
+        		<option value="Phú Yên">Phú Yên</option>
+        		<option value="Quảng Bình">Quảng Bình</option>
+        		<option value="Quảng Nam">Quảng Nam</option>
+        		<option value="Quảng Ngãi">Quảng Ngãi</option>
+        		<option value="Quảng Ninh">Quảng Ninh</option>
+        		<option value="Sóc Trăng">Sóc Trăng</option>
+        		<option value="Sơn La">Sơn La</option>
+        		<option value="Tây Ninh">Tây Ninh</option>
+        		<option value="Thái Bình">Thái Bình</option>
+        		<option value="Thái Nguyên">Thái Nguyên</option>
+        		<option value="Trà Vinh">Trà Vinh</option>
+        		<option value="Thanh Hóa">Thanh Hóa</option>
+       			<option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+        		<option value="Tiền Giang">Tiền Giang</option>
+        		<option value="Tuyên Quang">Tuyên Quang</option>
+        		<option value="Vĩnh Long">Vĩnh Long</option>
+        		<option value="Vĩnh Phúc">Vĩnh Phúc</option>
+        		<option value="Yên Bái">Yên Bái</option>
+
+               </select>
+            </div>
+            <div class="form-group">
+                <label for="schoolName11">Trường học <span class="required">*</span> :</label>
+                <input type="text" id="schoolName11" name="schoolName11" required>
+            </div>
+	   </div>
+	   <div class="form-row">
+	      <div class="form-group">
+                    <label for="schoolProvinceCode11">Mã tỉnh/TP trường học:</label>
+                    <input type="text" id="schoolProvinceCode11" name="schoolProvinceCode11" required readonly>
+                </div>
+	    <div class="form-group">
+    		<label for="schoolCode11">Mã trường <span class="required">*</span> :</label>
+   	        <input type="text" id="schoolCode11" name="schoolCode11" required>
+            </div>
+	   <div class="form-group">
+                    <label for="schoolDistrict11">Quận/Huyện trường học <span class="required">*</span> :</label>
+                    <select id="schoolDistrict11" name="schoolDistrict11" required>
+                        <option value="">Chọn quận/huyện</option>
+                    </select>
+                </div>
+	    <div class="form-group">
+    		<label for="districtCode11">Mã quận/huyện <span class="required">*</span> :</label>
+    		<input type="text" id="districtCode11" name="districtCode11" required>
+	   </div>
+	 </div>
+       
+      <h3>Trường học lớp 12</h3>
+       
+	   <div class="form-row">
+            <div class="form-group">
+                <label for="schoolProvince12">Tỉnh/Thành phố trường học <span class="required">*</span> :</label>
+                 <select id="schoolProvince12" name="schoolProvince12" required>
+                  <option value="">Chọn tỉnh/thành phố</option>
+       			<option value="An Giang">An Giang</option>
+        		<option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+        		<option value="Bạc Liêu">Bạc Liêu</option>
+        		<option value="Bắc Giang">Bắc Giang</option>
+        		<option value="Bắc Kạn">Bắc Kạn</option>
+        		<option value="Bắc Ninh">Bắc Ninh</option>
+        		<option value="Bến Tre">Bến Tre</option>
+        		<option value="Bình Định">Bình Định</option>
+        		<option value="Bình Dương">Bình Dương</option>
+        		<option value="Bình Phước">Bình Phước</option>
+        		<option value="Cà Mau">Cà Mau</option>
+        		<option value="Cao Bằng">Cao Bằng</option>
+        		<option value="Cần Thơ">Cần Thơ</option>
+        		<option value="Đà Nẵng">Đà Nẵng</option>
+        		<option value="Đắk Lắk">Đắk Lắk</option>
+        		<option value="Đắk Nông">Đắk Nông</option>
+        		<option value="Điện Biên">Điện Biên</option>
+        		<option value="Đồng Nai">Đồng Nai</option>
+        		<option value="Đồng Tháp">Đồng Tháp</option>
+        		<option value="Gia Lai">Gia Lai</option>
+        		<option value="Hà Giang">Hà Giang</option>
+        		<option value="Hà Nam">Hà Nam</option>
+        		<option value="Hà Nội">Hà Nội</option>
+        		<option value="Hải Dương">Hải Dương</option>
+        		<option value="Hải Phòng">Hải Phòng</option>
+        		<option value="Hà Tĩnh">Hà Tĩnh</option>
+        		<option value="Hậu Giang">Hậu Giang</option>
+        		<option value="Hòa Bình">Hòa Bình</option>
+        		<option value="Hồ Chí Minh">Hồ Chí Minh</option>
+        		<option value="Hưng Yên">Hưng Yên</option>
+        		<option value="Khánh Hòa">Khánh Hòa</option>
+        		<option value="Kiên Giang">Kiên Giang</option>
+        		<option value="Kon Tum">Kon Tum</option>
+        		<option value="Lai Châu">Lai Châu</option>
+        		<option value="Lâm Đồng">Lâm Đồng</option>
+        		<option value="Lào Cai">Lào Cai</option>
+        		<option value="Lạng Sơn">Lạng Sơn</option>
+        		<option value="Long An">Long An</option>
+        		<option value="Nam Định">Nam Định</option>
+        		<option value="Nghệ An">Nghệ An</option>
+        		<option value="Ninh Bình">Ninh Bình</option>
+        		<option value="Ninh Thuận">Ninh Thuận</option>
+        		<option value="Phú Thọ">Phú Thọ</option>
+        		<option value="Phú Yên">Phú Yên</option>
+        		<option value="Quảng Bình">Quảng Bình</option>
+        		<option value="Quảng Nam">Quảng Nam</option>
+        		<option value="Quảng Ngãi">Quảng Ngãi</option>
+        		<option value="Quảng Ninh">Quảng Ninh</option>
+        		<option value="Sóc Trăng">Sóc Trăng</option>
+        		<option value="Sơn La">Sơn La</option>
+        		<option value="Tây Ninh">Tây Ninh</option>
+        		<option value="Thái Bình">Thái Bình</option>
+        		<option value="Thái Nguyên">Thái Nguyên</option>
+        		<option value="Trà Vinh">Trà Vinh</option>
+        		<option value="Thanh Hóa">Thanh Hóa</option>
+       			<option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+        		<option value="Tiền Giang">Tiền Giang</option>
+        		<option value="Tuyên Quang">Tuyên Quang</option>
+        		<option value="Vĩnh Long">Vĩnh Long</option>
+        		<option value="Vĩnh Phúc">Vĩnh Phúc</option>
+        		<option value="Yên Bái">Yên Bái</option>
+
+               </select>
+            </div>
+            <div class="form-group">
+                <label for="schoolName12">Trường học <span class="required">*</span> :</label>
+                <input type="text" id="schoolName12" name="schoolName12" required>
+            </div>
+	   </div>
+	   <div class="form-row">
+	      <div class="form-group">
+                    <label for="schoolProvinceCode12">Mã tỉnh/TP trường học:</label>
+                    <input type="text" id="schoolProvinceCode12" name="schoolProvinceCode12" required readonly>
+                </div>
+	    <div class="form-group">
+    		<label for="schoolCode12">Mã trường <span class="required">*</span> :</label>
+   	        <input type="text" id="schoolCode12" name="schoolCode12" required>
+            </div>
+	   <div class="form-group">
+                    <label for="schoolDistrict12">Quận/Huyện trường học <span class="required">*</span> :</label>
+                    <select id="schoolDistrict12" name="schoolDistrict12" required>
+                        <option value="">Chọn quận/huyện</option>
+                    </select>
+                </div>
+	    <div class="form-group">
+    		<label for="districtCode12">Mã quận/huyện <span class="required">*</span> :</label>
+    		<input type="text" id="districtCode12" name="districtCode12" required>
+	   </div>
+    </div>
+	<button class="save-button" id="save_thong_tin">LƯU THAY ĐỔI</button>
+	</div>
+	</div>
+    </form>
+    </div>
+    <div class="form-container">
+		<div class="container">
+			<form id="thong_tin_hoc_ba">
+				<h1>NHẬP THÔNG TIN HỌC BẠ</h1>
+				<h2>Bảng điểm học bạ</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Môn học</th>
+							<th colspan="2">Lớp 11</th>
+							<th colspan="2">Lớp 12</th>
+						</tr>
+						<tr>
+							<th></th>
+							<th>Kỳ 1</th>
+							<th>Kỳ 2</th>
+							<th>Kỳ 1</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Toán</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="toan_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="toan_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="toan_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Lý</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="ly_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="ly_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="ly_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Hóa</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="hoa_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="hoa_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="hoa_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Sinh</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="sinh_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="sinh_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="sinh_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Văn</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="van_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="van_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="van_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Sử</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="su_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="su_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="su_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Địa</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="dia_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="dia_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="dia_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Tiếng Anh</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="anh_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="anh_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="anh_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Giáo Dục Công Dân</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="gdcd_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="gdcd_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="gdcd_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Tiếng Nhật</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="nhat_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="nhat_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="nhat_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Tiếng Trung</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="trung_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="trung_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="trung_ky1_lop12"></td>
+						</tr>
+						<tr>
+							<td>Tiếng Hàn</td>
+							<td><input type="number" step="0.1" min="0" max="10" id="han_ky1_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="han_ky2_lop11"></td>
+							<td><input type="number" step="0.1" min="0" max="10" id="han_ky1_lop12"></td>
+						</tr>
+					</tbody>
+				</table>
+				<button class="save-button" type="button" id="save_hoc_ba">LƯU THAY ĐỔI</button>
+			</form>		
+			
+	   </div>
+	</div> 
+	<div class ="form-container1">
+	<div class="container1">
+		<form id="thong_tin_nguyen_vong">
+        <h1>ĐĂNG KÝ NGUYỆN VỌNG</h1>
+        
+        <div id="wish-container">
+            <div class="section" id="wish-1">
+                <div class="section-header">
+                    <span>Nguyện vọng 1</span>
+                    <span class="delete-button" id="deleteWishbutton" onclick="deleteWish('wish-1')">🗑️</span>
+                </div>
+                <div class="input-group">
+                    <label for="major1">Ngành/Chương trình đăng ký xét tuyển</label>
+                    <div class="select-group">
+                        <select id="major1">
+							<option value="">Chọn ngành</option>
+							<option value="Công Nghệ Sinh Học">Công Nghệ Sinh Học</option>
+							<option value="Kỹ Thuật Hóa Học">Kỹ Thuật Hóa Học</option>
+							<option value="Kỹ Thuật Điều Khiển và Tự Động Hóa">Kỹ Thuật Điều Khiển và Tự Động Hóa</option>
+							<option value="Kỹ Thuật Y Sinh (Hệ Tư Sinh)">Kỹ Thuật Y Sinh (Hệ Tư Sinh)</option>
+							<option value="Kỹ Thuật Điện Tử - Viễn Thông (Hệ Thống Thông Minh Và IoT)">Kỹ Thuật Điện Tử - Viễn Thông (Hệ Thống Thông Minh Và IoT)</option>
+							<option value="Kỹ Thuật Điện Tử - Viễn Thông (Thiết Kế Vi Mạch Bản Dẫn)">Kỹ Thuật Điện Tử - Viễn Thông (Thiết Kế Vi Mạch Bản Dẫn)</option>
+							<option value="Kỹ Thuật Robot Và Trí Tuệ Nhân Tạo (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kỹ Thuật Robot Và Trí Tuệ Nhân Tạo (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Công Nghệ Thông Tin">Công Nghệ Thông Tin</option>
+							<option value="Kỹ Thuật Phần Mềm (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kỹ Thuật Phần Mềm (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Công Nghệ Thông Tin Việt Nhật">Công Nghệ Thông Tin Việt Nhật</option>
+							<option value="Khoa Học Máy Tính">Khoa Học Máy Tính</option>
+							<option value="Tài Năng Khoa Học Máy Tính">Tài Năng Khoa Học Máy Tính</option>
+							<option value="An Toàn Thông Tin (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">An Toàn Thông Tin (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Trí Tuệ Nhân Tạo">Trí Tuệ Nhân Tạo</option>
+							<option value="Kỹ Thuật Cơ Điện Tử">Kỹ Thuật Cơ Điện Tử</option>
+							<option value="Kỹ Thuật Cơ Khí">Kỹ Thuật Cơ Khí</option>
+							<option value="Vật Liệu Tiên Tiến Và Công Nghệ Nano">Vật Liệu Tiên Tiến Và Công Nghệ Nano</option>
+							<option value="Vật Liệu Thông Minh Và Trí Tuệ Nhân Tạo">Vật Liệu Thông Minh Và Trí Tuệ Nhân Tạo</option>
+							<option value="Chip Bán Dẫn Và Công Nghệ Đóng Gói">Chip Bán Dẫn Và Công Nghệ Đóng Gói</option>
+							<option value="Kỹ Thuật Ô Tô">Kỹ Thuật Ô Tô</option>
+							<option value="Cơ Điện Tử Ô Tô">Cơ Điện Tử Ô Tô</option>
+							<option value="Kỹ Thuật Phần Mềm Ô Tô">Kỹ Thuật Phần Mềm Ô Tô</option>
+							<option value="Quản Trị Kinh Doanh">Quản Trị Kinh Doanh</option>
+							<option value="Kế Toán">Kế Toán</option>
+							<option value="Tài Chính - Ngân Hàng">Tài Chính - Ngân Hàng</option>
+							<option value="Quản Trị Nhân Lực">Quản Trị Nhân Lực</option>
+							<option value="Luật Kinh Tế">Luật Kinh Tế</option>
+							<option value="Kinh Doanh Quốc Tế (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kinh Doanh Quốc Tế (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Logistics và Quản Lý Chuỗi Cung Ứng (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Logistics và Quản Lý Chuỗi Cung Ứng (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Marketing">Marketing</option>
+							<option value="Công Nghệ Tài Chính">Công Nghệ Tài Chính</option>
+							<option value="Kinh Tế Số">Kinh Tế Số</option>
+							<option value="Kinh Doanh Số">Kinh Doanh Số</option>
+							<option value="Thương Mại Điện Tử">Thương Mại Điện Tử</option>
+							<option value="Logistics Số">Logistics Số</option>
+							<option value="Công Nghệ Marketing">Công Nghệ Marketing</option>
+							<option value="Ngôn Ngữ Anh">Ngôn Ngữ Anh</option>
+							<option value="Ngôn Ngữ Trung Quốc">Ngôn Ngữ Trung Quốc</option>
+							<option value="Ngôn Ngữ Hàn Quốc">Ngôn Ngữ Hàn Quốc</option>
+							<option value="Ngôn Ngữ Nhật">Ngôn Ngữ Nhật</option>
+							<option value="Ngôn Ngữ Pháp">Ngôn Ngữ Pháp</option>
+							<option value="Đông Phương Học">Đông Phương Học</option>
+							<option value="Du Lịch (Định Hướng Quản Trị Du Lịch)">Du Lịch (Định Hướng Quản Trị Du Lịch)</option>
+							<option value="Kinh Doanh Du Lịch Số">Kinh Doanh Du Lịch Số</option>
+							<option value="Hướng Dẫn Du Lịch Quốc Tế">Hướng Dẫn Du Lịch Quốc Tế</option>
+							<option value="Quản Trị Khách Sạn">Quản Trị Khách Sạn</option>
+							<option value="Điều Dưỡng">Điều Dưỡng</option>
+							<option value="Dược Học">Dược Học</option>
+							<option value="Kỹ Thuật Phục Hồi Chức Năng">Kỹ Thuật Phục Hồi Chức Năng</option>
+							<option value="Kỹ Thuật Xét Nghiệm Y Học">Kỹ Thuật Xét Nghiệm Y Học</option>
+							<option value="Kỹ Thuật Hình Ảnh Y Học">Kỹ Thuật Hình Ảnh Y Học</option>
+							<option value="Y Khoa">Y Khoa</option>
+							<option value="Răng Hàm Mặt">Răng Hàm Mặt</option>
+							<option value="Quản Lý Bệnh Viện">Quản Lý Bệnh Viện</option>
+							<option value="Y Học Cổ Truyền">Y Học Cổ Truyền</option>
+                        </select>
+                        <select id="block1">
+							<option value="">Chọn tổ hợp xét tuyển</option>	
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="section" id="wish-2">
+                <div class="section-header">
+                    <span>Nguyện vọng 2</span>
+                    <span class="delete-button" id="deleteWishbutton" onclick="deleteWish('wish-2')">🗑️</span>
+                </div>
+                <div class="input-group">
+                    <label for="major2">Ngành/Chương trình đăng ký xét tuyển</label>
+                    <div class="select-group">
+                        <select id="major2">
+							<option value="">Chọn ngành</option>
+							<option value="Công Nghệ Sinh Học">Công Nghệ Sinh Học</option>
+							<option value="Kỹ Thuật Hóa Học">Kỹ Thuật Hóa Học</option>
+							<option value="Kỹ Thuật Điều Khiển và Tự Động Hóa">Kỹ Thuật Điều Khiển và Tự Động Hóa</option>
+							<option value="Kỹ Thuật Y Sinh (Hệ Tư Sinh)">Kỹ Thuật Y Sinh (Hệ Tư Sinh)</option>
+							<option value="Kỹ Thuật Điện Tử - Viễn Thông (Hệ Thống Thông Minh Và IoT)">Kỹ Thuật Điện Tử - Viễn Thông (Hệ Thống Thông Minh Và IoT)</option>
+							<option value="Kỹ Thuật Điện Tử - Viễn Thông (Thiết Kế Vi Mạch Bản Dẫn)">Kỹ Thuật Điện Tử - Viễn Thông (Thiết Kế Vi Mạch Bản Dẫn)</option>
+							<option value="Kỹ Thuật Robot Và Trí Tuệ Nhân Tạo (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kỹ Thuật Robot Và Trí Tuệ Nhân Tạo (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Công Nghệ Thông Tin">Công Nghệ Thông Tin</option>
+							<option value="Kỹ Thuật Phần Mềm (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kỹ Thuật Phần Mềm (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Công Nghệ Thông Tin Việt Nhật">Công Nghệ Thông Tin Việt Nhật</option>
+							<option value="Khoa Học Máy Tính">Khoa Học Máy Tính</option>
+							<option value="Tài Năng Khoa Học Máy Tính">Tài Năng Khoa Học Máy Tính</option>
+							<option value="An Toàn Thông Tin (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">An Toàn Thông Tin (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Trí Tuệ Nhân Tạo">Trí Tuệ Nhân Tạo</option>
+							<option value="Kỹ Thuật Cơ Điện Tử">Kỹ Thuật Cơ Điện Tử</option>
+							<option value="Kỹ Thuật Cơ Khí">Kỹ Thuật Cơ Khí</option>
+							<option value="Vật Liệu Tiên Tiến Và Công Nghệ Nano">Vật Liệu Tiên Tiến Và Công Nghệ Nano</option>
+							<option value="Vật Liệu Thông Minh Và Trí Tuệ Nhân Tạo">Vật Liệu Thông Minh Và Trí Tuệ Nhân Tạo</option>
+							<option value="Chip Bán Dẫn Và Công Nghệ Đóng Gói">Chip Bán Dẫn Và Công Nghệ Đóng Gói</option>
+							<option value="Kỹ Thuật Ô Tô">Kỹ Thuật Ô Tô</option>
+							<option value="Cơ Điện Tử Ô Tô">Cơ Điện Tử Ô Tô</option>
+							<option value="Kỹ Thuật Phần Mềm Ô Tô">Kỹ Thuật Phần Mềm Ô Tô</option>
+							<option value="Quản Trị Kinh Doanh">Quản Trị Kinh Doanh</option>
+							<option value="Kế Toán">Kế Toán</option>
+							<option value="Tài Chính - Ngân Hàng">Tài Chính - Ngân Hàng</option>
+							<option value="Quản Trị Nhân Lực">Quản Trị Nhân Lực</option>
+							<option value="Luật Kinh Tế">Luật Kinh Tế</option>
+							<option value="Kinh Doanh Quốc Tế (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kinh Doanh Quốc Tế (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Logistics và Quản Lý Chuỗi Cung Ứng (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Logistics và Quản Lý Chuỗi Cung Ứng (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Marketing">Marketing</option>
+							<option value="Công Nghệ Tài Chính">Công Nghệ Tài Chính</option>
+							<option value="Kinh Tế Số">Kinh Tế Số</option>
+							<option value="Kinh Doanh Số">Kinh Doanh Số</option>
+							<option value="Thương Mại Điện Tử">Thương Mại Điện Tử</option>
+							<option value="Logistics Số">Logistics Số</option>
+							<option value="Công Nghệ Marketing">Công Nghệ Marketing</option>
+							<option value="Ngôn Ngữ Anh">Ngôn Ngữ Anh</option>
+							<option value="Ngôn Ngữ Trung Quốc">Ngôn Ngữ Trung Quốc</option>
+							<option value="Ngôn Ngữ Hàn Quốc">Ngôn Ngữ Hàn Quốc</option>
+							<option value="Ngôn Ngữ Nhật">Ngôn Ngữ Nhật</option>
+							<option value="Ngôn Ngữ Pháp">Ngôn Ngữ Pháp</option>
+							<option value="Đông Phương Học">Đông Phương Học</option>
+							<option value="Du Lịch (Định Hướng Quản Trị Du Lịch)">Du Lịch (Định Hướng Quản Trị Du Lịch)</option>
+							<option value="Kinh Doanh Du Lịch Số">Kinh Doanh Du Lịch Số</option>
+							<option value="Hướng Dẫn Du Lịch Quốc Tế">Hướng Dẫn Du Lịch Quốc Tế</option>
+							<option value="Quản Trị Khách Sạn">Quản Trị Khách Sạn</option>
+							<option value="Điều Dưỡng">Điều Dưỡng</option>
+							<option value="Dược Học">Dược Học</option>
+							<option value="Kỹ Thuật Phục Hồi Chức Năng">Kỹ Thuật Phục Hồi Chức Năng</option>
+							<option value="Kỹ Thuật Xét Nghiệm Y Học">Kỹ Thuật Xét Nghiệm Y Học</option>
+							<option value="Kỹ Thuật Hình Ảnh Y Học">Kỹ Thuật Hình Ảnh Y Học</option>
+							<option value="Y Khoa">Y Khoa</option>
+							<option value="Răng Hàm Mặt">Răng Hàm Mặt</option>
+							<option value="Quản Lý Bệnh Viện">Quản Lý Bệnh Viện</option>
+							<option value="Y Học Cổ Truyền">Y Học Cổ Truyền</option>
+                        </select>
+                        <select id="block2">
+							<option value="">Chọn tổ hợp xét tuyển</option>	
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="section" id="wish-3">
+                <div class="section-header">
+                    <span>Nguyện vọng 3</span>
+                    <span class="delete-button" id="deleteWishbutton" onclick="deleteWish('wish-3')">🗑️</span>
+                </div>
+                <div class="input-group">
+                    <label for="major3">Ngành/Chương trình đăng ký xét tuyển</label>
+                    <div class="select-group">
+                        <select id="major3">
+							<option value="">Chọn ngành</option>
+							<option value="Công Nghệ Sinh Học">Công Nghệ Sinh Học</option>
+							<option value="Kỹ Thuật Hóa Học">Kỹ Thuật Hóa Học</option>
+							<option value="Kỹ Thuật Điều Khiển và Tự Động Hóa">Kỹ Thuật Điều Khiển và Tự Động Hóa</option>
+							<option value="Kỹ Thuật Y Sinh (Hệ Tư Sinh)">Kỹ Thuật Y Sinh (Hệ Tư Sinh)</option>
+							<option value="Kỹ Thuật Điện Tử - Viễn Thông (Hệ Thống Thông Minh Và IoT)">Kỹ Thuật Điện Tử - Viễn Thông (Hệ Thống Thông Minh Và IoT)</option>
+							<option value="Kỹ Thuật Điện Tử - Viễn Thông (Thiết Kế Vi Mạch Bản Dẫn)">Kỹ Thuật Điện Tử - Viễn Thông (Thiết Kế Vi Mạch Bản Dẫn)</option>
+							<option value="Kỹ Thuật Robot Và Trí Tuệ Nhân Tạo (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kỹ Thuật Robot Và Trí Tuệ Nhân Tạo (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Công Nghệ Thông Tin">Công Nghệ Thông Tin</option>
+							<option value="Kỹ Thuật Phần Mềm (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kỹ Thuật Phần Mềm (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Công Nghệ Thông Tin Việt Nhật">Công Nghệ Thông Tin Việt Nhật</option>
+							<option value="Khoa Học Máy Tính">Khoa Học Máy Tính</option>
+							<option value="Tài Năng Khoa Học Máy Tính">Tài Năng Khoa Học Máy Tính</option>
+							<option value="An Toàn Thông Tin (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">An Toàn Thông Tin (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Trí Tuệ Nhân Tạo">Trí Tuệ Nhân Tạo</option>
+							<option value="Kỹ Thuật Cơ Điện Tử">Kỹ Thuật Cơ Điện Tử</option>
+							<option value="Kỹ Thuật Cơ Khí">Kỹ Thuật Cơ Khí</option>
+							<option value="Vật Liệu Tiên Tiến Và Công Nghệ Nano">Vật Liệu Tiên Tiến Và Công Nghệ Nano</option>
+							<option value="Vật Liệu Thông Minh Và Trí Tuệ Nhân Tạo">Vật Liệu Thông Minh Và Trí Tuệ Nhân Tạo</option>
+							<option value="Chip Bán Dẫn Và Công Nghệ Đóng Gói">Chip Bán Dẫn Và Công Nghệ Đóng Gói</option>
+							<option value="Kỹ Thuật Ô Tô">Kỹ Thuật Ô Tô</option>
+							<option value="Cơ Điện Tử Ô Tô">Cơ Điện Tử Ô Tô</option>
+							<option value="Kỹ Thuật Phần Mềm Ô Tô">Kỹ Thuật Phần Mềm Ô Tô</option>
+							<option value="Quản Trị Kinh Doanh">Quản Trị Kinh Doanh</option>
+							<option value="Kế Toán">Kế Toán</option>
+							<option value="Tài Chính - Ngân Hàng">Tài Chính - Ngân Hàng</option>
+							<option value="Quản Trị Nhân Lực">Quản Trị Nhân Lực</option>
+							<option value="Luật Kinh Tế">Luật Kinh Tế</option>
+							<option value="Kinh Doanh Quốc Tế (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kinh Doanh Quốc Tế (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Logistics và Quản Lý Chuỗi Cung Ứng (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Logistics và Quản Lý Chuỗi Cung Ứng (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+							<option value="Marketing">Marketing</option>
+							<option value="Công Nghệ Tài Chính">Công Nghệ Tài Chính</option>
+							<option value="Kinh Tế Số">Kinh Tế Số</option>
+							<option value="Kinh Doanh Số">Kinh Doanh Số</option>
+							<option value="Thương Mại Điện Tử">Thương Mại Điện Tử</option>
+							<option value="Logistics Số">Logistics Số</option>
+							<option value="Công Nghệ Marketing">Công Nghệ Marketing</option>
+							<option value="Ngôn Ngữ Anh">Ngôn Ngữ Anh</option>
+							<option value="Ngôn Ngữ Trung Quốc">Ngôn Ngữ Trung Quốc</option>
+							<option value="Ngôn Ngữ Hàn Quốc">Ngôn Ngữ Hàn Quốc</option>
+							<option value="Ngôn Ngữ Nhật">Ngôn Ngữ Nhật</option>
+							<option value="Ngôn Ngữ Pháp">Ngôn Ngữ Pháp</option>
+							<option value="Đông Phương Học">Đông Phương Học</option>
+							<option value="Du Lịch (Định Hướng Quản Trị Du Lịch)">Du Lịch (Định Hướng Quản Trị Du Lịch)</option>
+							<option value="Kinh Doanh Du Lịch Số">Kinh Doanh Du Lịch Số</option>
+							<option value="Hướng Dẫn Du Lịch Quốc Tế">Hướng Dẫn Du Lịch Quốc Tế</option>
+							<option value="Quản Trị Khách Sạn">Quản Trị Khách Sạn</option>
+							<option value="Điều Dưỡng">Điều Dưỡng</option>
+							<option value="Dược Học">Dược Học</option>
+							<option value="Kỹ Thuật Phục Hồi Chức Năng">Kỹ Thuật Phục Hồi Chức Năng</option>
+							<option value="Kỹ Thuật Xét Nghiệm Y Học">Kỹ Thuật Xét Nghiệm Y Học</option>
+							<option value="Kỹ Thuật Hình Ảnh Y Học">Kỹ Thuật Hình Ảnh Y Học</option>
+							<option value="Y Khoa">Y Khoa</option>
+							<option value="Răng Hàm Mặt">Răng Hàm Mặt</option>
+							<option value="Quản Lý Bệnh Viện">Quản Lý Bệnh Viện</option>
+							<option value="Y Học Cổ Truyền">Y Học Cổ Truyền</option>
+                        </select>
+                        <select id="block3">
+							<option value="">Chọn tổ hợp xét tuyển</option>	
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<button class="add-button" id="addWishBtn" onclick="addWish()">THÊM NGUYỆN VỌNG</button>
+        <button class="save-button" id="save_nguyen_vong">LƯU THAY ĐỔI</button>
+        <div class="message" id="message"></div>
+		</form>
+    </div>
+	<div class="form-container1">
+		<div class="container">
+			<form id="minh_chung">
+			<div class="upload-section">
+				<h3>Upload ảnh minh chứng CCCD</h3>
+				<label for="cccd-front-upload">Ảnh mặt trước CCCD:</label>
+				<input type="file" id="cccd-front-upload" accept="image/*"><br>
+				<div id="cccd-front-preview" class="image-preview"></div>
+			
+				<label for="cccd-back-upload">Ảnh mặt sau CCCD:</label>
+				<input type="file" id="cccd-back-upload" accept="image/*"><br>
+				<div id="cccd-back-preview" class="image-preview"></div>
+			
+				<h3>Upload ảnh hoặc tài liệu học bạ</h3>
+				<label for="hoc-ba-upload">Học bạ (ảnh hoặc PDF):</label>
+				<input type="file" id="hoc-ba-upload" accept="image/*,.pdf" multiple><br>
+				<div id="hoc-ba-preview" class="image-preview"></div>
+			</div>
+			</form>
+	</div>
+	</div>
+	</div>
+
+	<footer class="footer">
+		<div class="footer-content">
+			<div class="logo">
+				<img src="./styles/pictures1/logo2.jpg" alt="Phenikaa University">
+			</div>
+			<div style="text-align: center;">
+				<p>
+					<i class="icon">📍</i>
+					Tầng 1, Tòa nhà A9 - Phòng Tuyển sinh và Truyền thông, Trường Đại học Phenikaa,<br>
+					Phường Yên Nghĩa, Quận Hà Đông, Hà Nội
+				</p>
+				<p>Hotline Tuyển sinh:</p>
+				<div>
+					<i class="icon">📞</i><strong>094 651 1010</strong> | 
+					<i class="icon">📞</i><strong>096 751 1010</strong> | 
+					<i class="icon">📞</i><strong>096 881 1010</strong>
+				</div>
+				<div>
+					<i class="icon">🌐</i><a href="http://phenikaa-uni.edu.vn">Phenikaa.edu.vn</a> | 
+					<i class="icon">📱</i><a href="http://facebook.com/daihochophenikaa">Facebook</a> | 
+					<i class="icon">✉️</i><a href="mailto:tuyensinh@phenikaa-uni.edu.vn">tuyensinh@phenikaa-uni.edu.vn</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<script src ="./javascript/thi_sinh.js"></script>
+    <script src ="./javascript/thi_sinh_1.js"></script>
+	<script src ="./javascript/thi_sinh_2.js"></script>
+	<script src ="./javascript/thi_sinh_3.js"></script>
+	<script src ="./javascript/thi_sinh_4.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="./styles/Admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href ="./styles/pictures1/logo3.jpg" type ="image/jpeg">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="./styles/pictures1/logo2.jpg" alt="Logo">
+        </div>
+        <h1>Hệ thống quản lý tuyển sinh</h1>
+        <div class="year-select">
+            <select>
+                <option value="2024-2025">2024-2025</option>
+            </select>
+        </div>
+        <div class="signout-button">
+            <button type="button" class="signout-btn"><i class="fa-solid fa-right-from-bracket fa-lg"></i></button>
+        </div>
+    </header>
+
+    <main>
+        <section class="filter-section">
+            <h2>Quản lý hồ sơ</h2>
+            <div class="filter-form">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ho-ten">Họ và tên:</label>
+                            <input type="text" id="ho-ten">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cmnd">CMND/CCCD:</label>
+                            <input type="text" id="cmnd">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sdt">Số điện thoại:</label>
+                            <input type="text" id="sdt">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nganh">Ngành học đăng kí:</label>
+                            <select id="nganh">
+                                <option value="">Chọn ngành</option>
+                                <option value="Công Nghệ Sinh Học">Công Nghệ Sinh Học</option>
+                                <option value="Kỹ Thuật Hóa Học">Kỹ Thuật Hóa Học</option>
+                                <option value="Kỹ Thuật Điều Khiển và Tự Động Hóa">Kỹ Thuật Điều Khiển và Tự Động Hóa</option>
+                                <option value="Kỹ Thuật Y Sinh (Hệ Tư Sinh)">Kỹ Thuật Y Sinh (Hệ Tư Sinh)</option>
+                                <option value="Kỹ Thuật Điện Tử - Viễn Thông (Hệ Thống Thông Minh Và IoT)">Kỹ Thuật Điện Tử - Viễn Thông (Hệ Thống Thông Minh Và IoT)</option>
+                                <option value="Kỹ Thuật Điện Tử - Viễn Thông (Thiết Kế Vi Mạch Bản Dẫn)">Kỹ Thuật Điện Tử - Viễn Thông (Thiết Kế Vi Mạch Bản Dẫn)</option>
+                                <option value="Kỹ Thuật Robot Và Trí Tuệ Nhân Tạo (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kỹ Thuật Robot Và Trí Tuệ Nhân Tạo (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+                                <option value="Công Nghệ Thông Tin">Công Nghệ Thông Tin</option>
+                                <option value="Kỹ Thuật Phần Mềm (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kỹ Thuật Phần Mềm (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+                                <option value="Công Nghệ Thông Tin Việt Nhật">Công Nghệ Thông Tin Việt Nhật</option>
+                                <option value="Khoa Học Máy Tính">Khoa Học Máy Tính</option>
+                                <option value="Tài Năng Khoa Học Máy Tính">Tài Năng Khoa Học Máy Tính</option>
+                                <option value="An Toàn Thông Tin (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">An Toàn Thông Tin (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+                                <option value="Trí Tuệ Nhân Tạo">Trí Tuệ Nhân Tạo</option>
+                                <option value="Kỹ Thuật Cơ Điện Tử">Kỹ Thuật Cơ Điện Tử</option>
+                                <option value="Kỹ Thuật Cơ Khí">Kỹ Thuật Cơ Khí</option>
+                                <option value="Vật Liệu Tiên Tiến Và Công Nghệ Nano">Vật Liệu Tiên Tiến Và Công Nghệ Nano</option>
+                                <option value="Vật Liệu Thông Minh Và Trí Tuệ Nhân Tạo">Vật Liệu Thông Minh Và Trí Tuệ Nhân Tạo</option>
+                                <option value="Chip Bán Dẫn Và Công Nghệ Đóng Gói">Chip Bán Dẫn Và Công Nghệ Đóng Gói</option>
+                                <option value="Kỹ Thuật Ô Tô">Kỹ Thuật Ô Tô</option>
+                                <option value="Cơ Điện Tử Ô Tô">Cơ Điện Tử Ô Tô</option>
+                                <option value="Kỹ Thuật Phần Mềm Ô Tô">Kỹ Thuật Phần Mềm Ô Tô</option>
+                                <option value="Quản Trị Kinh Doanh">Quản Trị Kinh Doanh</option>
+                                <option value="Kế Toán">Kế Toán</option>
+                                <option value="Tài Chính - Ngân Hàng">Tài Chính - Ngân Hàng</option>
+                                <option value="Quản Trị Nhân Lực">Quản Trị Nhân Lực</option>
+                                <option value="Luật Kinh Tế">Luật Kinh Tế</option>
+                                <option value="Kinh Doanh Quốc Tế (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Kinh Doanh Quốc Tế (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+                                <option value="Logistics và Quản Lý Chuỗi Cung Ứng (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)">Logistics và Quản Lý Chuỗi Cung Ứng (Một Số Học Phần Chuyên Ngành Học Bằng Tiếng Anh)</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Công Nghệ Tài Chính">Công Nghệ Tài Chính</option>
+                                <option value="Kinh Tế Số">Kinh Tế Số</option>
+                                <option value="Kinh Doanh Số">Kinh Doanh Số</option>
+                                <option value="Thương Mại Điện Tử">Thương Mại Điện Tử</option>
+                                <option value="Logistics Số">Logistics Số</option>
+                                <option value="Công Nghệ Marketing">Công Nghệ Marketing</option>
+                                <option value="Ngôn Ngữ Anh">Ngôn Ngữ Anh</option>
+                                <option value="Ngôn Ngữ Trung Quốc">Ngôn Ngữ Trung Quốc</option>
+                                <option value="Ngôn Ngữ Hàn Quốc">Ngôn Ngữ Hàn Quốc</option>
+                                <option value="Ngôn Ngữ Nhật">Ngôn Ngữ Nhật</option>
+                                <option value="Ngôn Ngữ Pháp">Ngôn Ngữ Pháp</option>
+                                <option value="Đông Phương Học">Đông Phương Học</option>
+                                <option value="Du Lịch (Định Hướng Quản Trị Du Lịch)">Du Lịch (Định Hướng Quản Trị Du Lịch)</option>
+                                <option value="Kinh Doanh Du Lịch Số">Kinh Doanh Du Lịch Số</option>
+                                <option value="Hướng Dẫn Du Lịch Quốc Tế">Hướng Dẫn Du Lịch Quốc Tế</option>
+                                <option value="Quản Trị Khách Sạn">Quản Trị Khách Sạn</option>
+                                <option value="Điều Dưỡng">Điều Dưỡng</option>
+                                <option value="Dược Học">Dược Học</option>
+                                <option value="Kỹ Thuật Phục Hồi Chức Năng">Kỹ Thuật Phục Hồi Chức Năng</option>
+                                <option value="Kỹ Thuật Xét Nghiệm Y Học">Kỹ Thuật Xét Nghiệm Y Học</option>
+                                <option value="Kỹ Thuật Hình Ảnh Y Học">Kỹ Thuật Hình Ảnh Y Học</option>
+                                <option value="Y Khoa">Y Khoa</option>
+                                <option value="Răng Hàm Mặt">Răng Hàm Mặt</option>
+                                <option value="Quản Lý Bệnh Viện">Quản Lý Bệnh Viện</option>
+                                <option value="Y Học Cổ Truyền">Y Học Cổ Truyền</option>                         
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="reset-btn">Đặt lại</button>
+                        <button type="submit" class="apply-btn">Áp dụng</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="table-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Họ và tên</th>
+                        <th>CMND/CCCD</th>
+                        <th>Số điện thoại</th>
+                        <th>Ngành học đăng kí</th>
+                        <th>Thứ tự nguyện vọng</th>
+                        <th><i class="fa-solid fa-eye"></i></th>
+                    </tr>
+                </thead>
+                <tbody id="student-list">
+                    <!-- Dữ liệu thí sinh sẽ được thêm vào đây-->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+<script src ="./javascript/admin.js"></script>
+</body>
+</html>
