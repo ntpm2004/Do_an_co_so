@@ -1,5 +1,5 @@
-document.querySelector('.signout-btn').addEventListener('click', function() {
-    window.location.href = 'index.html';
+document.querySelector('.signout-btn').addEventListener('click', function () {
+    window.location.href = 'dang_nhap_dang_ky.html';
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Loop through each user
-        filteredUsers.forEach((cmnd, index) => {
+        filteredUsers.forEach((cmnd, dang_nhap_dang_ky) => {
             const userDetails = JSON.parse(localStorage.getItem(`thong_tin_data_${cmnd}`)) || {};
             const userWishes = JSON.parse(localStorage.getItem(`wishes_data_${cmnd}`)) || [];
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${index + 1}</td>
+                <td>${dang_nhap_dang_ky + 1}</td>
                 <td>${userDetails.name || 'Chưa có tên'}</td>
                 <td>${cmnd}</td>
                 <td>${users[cmnd].phone || 'Chưa có số điện thoại'}</td>
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </td>
                 <td>
                     <table>
-                        ${userWishes.length > 0 ? userWishes.map((wish, index) => `<tr><td>${index + 1}</td></tr>`).join('') : '<tr><td>Không có</td></tr>'}
+                        ${userWishes.length > 0 ? userWishes.map((wish, dang_nhap_dang_ky) => `<tr><td>${dang_nhap_dang_ky + 1}</td></tr>`).join('') : '<tr><td>Không có</td></tr>'}
                     </table>
                 </td>
                 <td><button class="view-button" data-cmnd="${cmnd}">Xem</button></td>
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Reset button functionality
-    document.querySelector('.reset-btn').onclick = function() {
+    document.querySelector('.reset-btn').onclick = function () {
         document.getElementById('ho-ten').value = '';
         document.getElementById('cmnd').value = '';
         document.getElementById('sdt').value = '';
