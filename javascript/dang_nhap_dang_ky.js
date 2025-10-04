@@ -1,35 +1,17 @@
-// ==================== Firebase Khởi tạo ====================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// ==================== Import Firebase ====================
+import { auth, db } from "./firebase-config.js";
 import {
-    getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 import {
-    getFirestore,
     doc,
     setDoc,
-    getDoc,
     getDocs,
     collection,
     query,
     where
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// Config Firebase (thay giá trị thật của bạn vào đây)
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_MSG_ID",
-    appId: "YOUR_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // ==================== Notification ====================
 function showNotification(message, isError = true) {
@@ -76,13 +58,27 @@ document.getElementById("registerButton")?.addEventListener("click", async (e) =
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCredential.user.uid;
 
-        await setDoc(doc(db, "users", userCredential.user.uid), {
+        // 🔹 Lưu thông tin cơ bản vào "users"
+        await setDoc(doc(db, "users", uid), {
             cmnd,
             fullname,
             email,
             phone,
-            role: "student"
+            role: "student",
+            status: "pending",
+            createdAt: new Date().toISOString()
+        });
+
+        // 🔹 Tạo document rỗng trong "students"
+        await setDoc(doc(db, "students", uid), {
+            personalInfo: {},
+            schoolRecords: {},
+            aspirations: [],
+            cccdImageUrl: "",
+            transcriptImageUrl: "",
+            createdAt: new Date().toISOString()
         });
 
         showNotification("Đăng ký thành công!", false);
@@ -118,29 +114,26 @@ window.handleLogin = async function (e) {
             return;
         }
 
-        // ---- Admin login ----
+        // ---- Admin login (Không xác thực Firebase) ----
         if (userType === "admin") {
-            let emailToUse = "";
+            // Danh sách tài khoản admin (cố định)
+            const adminAccounts = [
+                { username: "admin1", password: "123456" },
+                { username: "superadmin", password: "admin123" }
+            ];
 
-            if (loginId.includes("@")) {
-                emailToUse = loginId;
-            } else {
-                const q = query(collection(db, "users"), where("username", "==", loginId), where("role", "==", "admin"));
-                const snap = await getDocs(q);
-                if (snap.empty) return showNotification("Không tìm thấy username admin.");
-                emailToUse = snap.docs[0].data().email;
+            // Tìm admin có username + password khớp
+            const found = adminAccounts.find(
+                (a) => a.username === loginId && a.password === loginPassword
+            );
+
+            if (!found) {
+                return showNotification("Sai thông tin admin!");
             }
 
-            const userCredential = await signInWithEmailAndPassword(auth, emailToUse, loginPassword);
-            const adminDoc = await getDoc(doc(db, "users", userCredential.user.uid));
-
-            if (!adminDoc.exists() || adminDoc.data().role !== "admin") {
-                await signOut(auth);
-                return showNotification("Tài khoản không có quyền admin.");
-            }
-
-            sessionStorage.setItem("uid", userCredential.user.uid);
+            // Nếu đúng -> lưu session và vào trang admin
             sessionStorage.setItem("role", "admin");
+            sessionStorage.setItem("username", found.username);
 
             showNotification("Đăng nhập admin thành công!", false);
             setTimeout(() => { window.location.assign("admin.html"); }, 800);
