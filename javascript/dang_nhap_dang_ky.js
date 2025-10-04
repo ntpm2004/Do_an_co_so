@@ -81,8 +81,12 @@ document.getElementById("registerButton")?.addEventListener("click", async (e) =
             createdAt: new Date().toISOString()
         });
 
-        showNotification("Đăng ký thành công!", false);
-        setTimeout(() => { window.location.reload(); }, 1000);
+        showNotification("Đăng ký thành công! Vui lòng đăng nhập.", false);
+        setTimeout(() => {
+            document.getElementById("registrationContainer").style.display = "none";
+            document.getElementById("loginModal").style.display = "block";
+        }, 1000);
+
     } catch (err) {
         showNotification("Lỗi: " + err.message);
     }
