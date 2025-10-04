@@ -3,6 +3,9 @@ import { auth, db } from "./firebase-config.js";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    sendEmailVerification,
+    signOut,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 import {
     doc,
@@ -17,25 +20,20 @@ import {
 function showNotification(message, isError = true) {
     const noti = document.getElementById("notification");
     if (!noti) {
-        alert(message); // fallback nếu không có div notification
+        alert(message);
         return;
     }
     noti.textContent = message;
     noti.style.display = "block";
-    noti.style.backgroundColor = isError ? "red" : "green";
-    setTimeout(() => { noti.style.display = "none"; }, 3000);
+    noti.style.backgroundColor = isError ? "#e74c3c" : "#27ae60";
+    setTimeout(() => { noti.style.display = "none"; }, 3500);
 }
 
 // ==================== Toggle Role ====================
 window.toggleFields = function () {
     const userType = document.querySelector('input[name="userType"]:checked').value;
     const loginLabel = document.getElementById("loginLabel");
-
-    if (userType === "student") {
-        loginLabel.textContent = "Số CMND/CCCD *";
-    } else {
-        loginLabel.textContent = "Username hoặc Email *";
-    }
+    loginLabel.textContent = (userType === "student") ? "Số CMND/CCCD *" : "Username hoặc Email *";
 };
 
 // ==================== Đăng ký (Student) ====================
@@ -49,18 +47,22 @@ document.getElementById("registerButton")?.addEventListener("click", async (e) =
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirm-password").value;
 
-    if (!cmnd || !fullname || !email || !phone || !password || !confirmPassword) {
-        return showNotification("Vui lòng điền đầy đủ thông tin!");
-    }
-    if (password !== confirmPassword) {
-        return showNotification("Mật khẩu không khớp!");
-    }
+    if (!cmnd || !fullname || !email || !phone || !password || !confirmPassword)
+        return showNotification("⚠️ Vui lòng điền đầy đủ thông tin!");
+
+    if (password !== confirmPassword)
+        return showNotification("⚠️ Mật khẩu không khớp!");
 
     try {
+        // Tạo tài khoản
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCredential.user.uid;
+        const user = userCredential.user;
+        const uid = user.uid;
 
-        // 🔹 Lưu thông tin cơ bản vào "users"
+        // Gửi email xác minh
+        await sendEmailVerification(user);
+
+        // 🔹 Lưu thông tin cơ bản vào Firestore
         await setDoc(doc(db, "users", uid), {
             cmnd,
             fullname,
@@ -68,10 +70,11 @@ document.getElementById("registerButton")?.addEventListener("click", async (e) =
             phone,
             role: "student",
             status: "pending",
+            verified: false,
             createdAt: new Date().toISOString()
         });
 
-        // 🔹 Tạo document rỗng trong "students"
+        // 🔹 Tạo document trống trong students
         await setDoc(doc(db, "students", uid), {
             personalInfo: {},
             schoolRecords: {},
@@ -81,14 +84,13 @@ document.getElementById("registerButton")?.addEventListener("click", async (e) =
             createdAt: new Date().toISOString()
         });
 
-        showNotification("Đăng ký thành công! Vui lòng đăng nhập.", false);
-        setTimeout(() => {
-            document.getElementById("registrationContainer").style.display = "none";
-            document.getElementById("loginModal").style.display = "block";
-        }, 1000);
+        // Hiển thị thông báo và chờ xác minh email
+        showNotification("Đăng ký thành công! Vui lòng mở email và nhấn vào link xác minh trước khi đăng nhập.", false);
 
+        // Không tự động chuyển — chỉ signOut để người dùng xác minh
+        await signOut(auth);
     } catch (err) {
-        showNotification("Lỗi: " + err.message);
+        showNotification("❌ Lỗi: " + err.message);
     }
 });
 
@@ -109,8 +111,16 @@ window.handleLogin = async function (e) {
 
             const email = snap.docs[0].data().email;
             const userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
+            const user = userCredential.user;
 
-            sessionStorage.setItem("uid", userCredential.user.uid);
+            // 🔹 Kiểm tra đã xác minh email chưa
+            if (!user.emailVerified) {
+                showNotification("⚠️ Email của bạn chưa được xác minh. Vui lòng kiểm tra hộp thư!", true);
+                await signOut(auth);
+                return;
+            }
+
+            sessionStorage.setItem("uid", user.uid);
             sessionStorage.setItem("role", "student");
 
             showNotification("Đăng nhập thí sinh thành công!", false);
@@ -118,30 +128,20 @@ window.handleLogin = async function (e) {
             return;
         }
 
-        // ---- Admin login (Không xác thực Firebase) ----
+        // ---- Admin login ----
         if (userType === "admin") {
-            // Danh sách tài khoản admin (cố định)
             const adminAccounts = [
                 { username: "admin1", password: "123456" },
                 { username: "superadmin", password: "admin123" }
             ];
-
-            // Tìm admin có username + password khớp
             const found = adminAccounts.find(
                 (a) => a.username === loginId && a.password === loginPassword
             );
-
-            if (!found) {
-                return showNotification("Sai thông tin admin!");
-            }
-
-            // Nếu đúng -> lưu session và vào trang admin
+            if (!found) return showNotification("Sai thông tin admin!");
             sessionStorage.setItem("role", "admin");
             sessionStorage.setItem("username", found.username);
-
             showNotification("Đăng nhập admin thành công!", false);
             setTimeout(() => { window.location.assign("admin.html"); }, 800);
-            return;
         }
     } catch (err) {
         console.error("Login error:", err);
@@ -157,21 +157,21 @@ const registrationContainer = document.getElementById("registrationContainer");
 const openLoginModal = document.getElementById("openLoginModal");
 const backToRegister = document.getElementById("backToRegister");
 
-// Mở modal đăng nhập khi ấn "Đăng nhập" trên header
+// Mở modal đăng nhập
 loginBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     registrationContainer.style.display = "none";
     loginModal.style.display = "block";
 });
 
-// Mở form đăng ký khi ấn "Đăng ký" trên header
+// Mở form đăng ký
 signupBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     loginModal.style.display = "none";
     registrationContainer.style.display = "block";
 });
 
-// Từ form đăng ký → mở đăng nhập
+// Từ form đăng ký → đăng nhập
 openLoginModal?.addEventListener("click", (e) => {
     e.preventDefault();
     registrationContainer.style.display = "none";
@@ -183,4 +183,17 @@ backToRegister?.addEventListener("click", (e) => {
     e.preventDefault();
     loginModal.style.display = "none";
     registrationContainer.style.display = "block";
+});
+
+// ==================== Theo dõi xác minh email ====================
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        await user.reload();
+        if (user.emailVerified) {
+            showNotification("Email đã xác minh! Bạn có thể đăng nhập ngay.", false);
+            registrationContainer.style.display = "none";
+            loginModal.style.display = "block";
+            await signOut(auth);
+        }
+    }
 });
