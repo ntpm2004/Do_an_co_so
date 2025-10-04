@@ -155,6 +155,93 @@
             </table>
         </section>
     </main>
+    <!-- Modal xem chi tiết thí sinh -->
+    <div id="view-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>THÔNG TIN CHI TIẾT THÍ SINH</h2>
+
+            <!-- Thông tin cá nhân -->
+            <section class="modal-section">
+                <h3>Thông tin cá nhân</h3>
+                <div class="info-grid">
+                    <p><strong>Họ và tên:</strong> <span id="view-name"></span></p>
+                    <p><strong>Giới tính:</strong> <span id="view-gender"></span></p>
+                    <p><strong>Ngày sinh:</strong> <span id="view-dob"></span></p>
+                    <p><strong>Dân tộc:</strong> <span id="view-ethnicity"></span></p>
+                    <p><strong>Tôn giáo:</strong> <span id="view-religion"></span></p>
+                    <p><strong>Email:</strong> <span id="view-email"></span></p>
+                </div>
+            </section>
+
+            <!-- CCCD -->
+            <section class="modal-section">
+                <h3>Thông tin CCCD</h3>
+                <div class="info-grid">
+                    <p><strong>Số CCCD:</strong> <span id="view-identity"></span></p>
+                    <p><strong>Ngày cấp:</strong> <span id="view-issueDate"></span></p>
+                    <p><strong>Nơi cấp:</strong> <span id="view-issuedBy"></span></p>
+                </div>
+            </section>
+
+            <!-- Địa chỉ -->
+            <section class="modal-section">
+                <h3>Địa chỉ liên hệ</h3>
+                <div class="info-grid">
+                    <p><strong>Tỉnh/TP:</strong> <span id="view-province"></span></p>
+                    <p><strong>Quận/Huyện:</strong> <span id="view-district"></span></p>
+                    <p><strong>Xã/Phường:</strong> <span id="view-ward"></span></p>
+                    <p><strong>Số nhà/Thôn:</strong> <span id="view-village"></span></p>
+                    <p><strong>SĐT thí sinh:</strong> <span id="view-studentPhone"></span></p>
+                    <p><strong>SĐT phụ huynh:</strong> <span id="view-parentPhone"></span></p>
+                </div>
+            </section>
+
+            <!-- Trường học -->
+            <section class="modal-section">
+                <h3>Thông tin trường học</h3>
+                <div class="info-grid">
+                    <p><strong>Trường lớp 10:</strong> <span id="view-school10"></span></p>
+                    <p><strong>Mã trường lớp 10:</strong> <span id="view-schoolCode10"></span></p>
+                    <p><strong>Trường lớp 11:</strong> <span id="view-school11"></span></p>
+                    <p><strong>Mã trường lớp 11:</strong> <span id="view-schoolCode11"></span></p>
+                    <p><strong>Trường lớp 12:</strong> <span id="view-school12"></span></p>
+                    <p><strong>Mã trường lớp 12:</strong> <span id="view-schoolCode12"></span></p>
+                </div>
+            </section>
+
+            <!-- Học bạ -->
+            <section class="modal-section">
+                <h3>Kết quả học bạ</h3>
+                <div class="scrollable-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Môn học</th>
+                                <th>10 - Kỳ 1</th>
+                                <th>10 - Kỳ 2</th>
+                                <th>11 - Kỳ 1</th>
+                                <th>11 - Kỳ 2</th>
+                                <th>12 - Kỳ 1</th>
+                            </tr>
+                        </thead>
+                        <tbody id="view-transcript">
+                            <!-- Dữ liệu học bạ sẽ được thêm bằng JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Nguyện vọng -->
+            <section class="modal-section">
+                <h3>Nguyện vọng xét tuyển</h3>
+                <ul id="view-wishes">
+                    <!-- Dữ liệu nguyện vọng sẽ được thêm bằng JS -->
+                </ul>
+            </section>
+        </div>
+    </div>
+
 
     <script src="./javascript/admin.js"></script>
 </body>

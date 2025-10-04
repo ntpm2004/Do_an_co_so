@@ -25,13 +25,17 @@ header {
 
 h1 {
     font-size: 25px;
-    margin: 0; /* Xóa khoảng cách margin mặc định của h1 */
-    flex-grow: 1; /* Chiếm không gian còn lại để căn giữa */
-    text-align: center; /* Căn giữa văn bản */
+    margin: 0;
+    /* Xóa khoảng cách margin mặc định của h1 */
+    flex-grow: 1;
+    /* Chiếm không gian còn lại để căn giữa */
+    text-align: center;
+    /* Căn giữa văn bản */
 }
 
 .year-select {
-    margin-right: 10px; /* Khoảng cách giữa select và button */
+    margin-right: 10px;
+    /* Khoảng cách giữa select và button */
 }
 
 .year-select select {
@@ -42,7 +46,8 @@ h1 {
 
 .action-container {
     display: flex;
-    align-items: center; /* Đảm bảo button và select được căn theo hàng ngang */
+    align-items: center;
+    /* Đảm bảo button và select được căn theo hàng ngang */
 }
 
 .signout-button button {
@@ -50,14 +55,15 @@ h1 {
     cursor: pointer;
     border-radius: 5px;
     padding: 5px;
-    margin-left: 10px; /* Khoảng cách giữa select và button */
+    margin-left: 10px;
+    /* Khoảng cách giữa select và button */
 }
 
 main {
     padding: 20px;
 }
 
-.admin-section{
+.admin-section {
     width: 10%;
     background-color: white;
     border-radius: 8px;
@@ -114,7 +120,8 @@ main {
     margin: 10px;
 }
 
-.apply-btn, .reset-btn {
+.apply-btn,
+.reset-btn {
     padding: 8px 15px;
     border: none;
     cursor: pointer;
@@ -143,15 +150,125 @@ table {
     margin-top: 10px;
 }
 
-table, th, td {
+table,
+th,
+td {
     border: 1px solid #ddd;
 }
 
-th, td {
+th,
+td {
     padding: 10px;
     text-align: center;
 }
 
 th {
     background-color: #f4f4f4;
+}
+
+/* Modal overlay */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+/* Nội dung chính */
+.modal-content {
+    background: #fff;
+    width: 60%;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    padding: 30px 40px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Nút đóng */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+/* Tiêu đề */
+.modal-content h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+/* Các phần */
+.modal-section {
+    margin-bottom: 25px;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
+
+.modal-section h3 {
+    color: #444;
+    margin-bottom: 10px;
+}
+
+/* Lưới thông tin */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px 20px;
+}
+
+.info-grid p {
+    margin: 0;
+    background: #f9f9f9;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* Bảng học bạ */
+.scrollable-table {
+    overflow-x: auto;
+}
+
+.scrollable-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scrollable-table th,
+.scrollable-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+.scrollable-table th {
+    background: #f1f1f1;
+}
+
+/* Hiệu ứng mở */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
