@@ -147,7 +147,7 @@ const provinceCodes = {
 };
 
 
-
+export { districts, provinceCodes };
 
 
 // Hàm để cập nhật danh sách huyện dựa trên tỉnh đã chọn

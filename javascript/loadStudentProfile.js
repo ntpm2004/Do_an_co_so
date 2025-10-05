@@ -1,13 +1,15 @@
 // ==================== Import Firebase ====================
 import { db } from "./firebase-config.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { districts } from "./thi_sinh_1.js"; // Đảm bảo file này export { districts }
 
 // ==================== Load dữ liệu thí sinh ====================
 async function loadStudentProfile() {
     const uid = sessionStorage.getItem("uid");
     if (!uid) {
         alert("❌ Bạn chưa đăng nhập!");
-        return (window.location.href = "index.html");
+        window.location.href = "index.html";
+        return;
     }
 
     try {
@@ -23,61 +25,85 @@ async function loadStudentProfile() {
         const p = data.personalInfo || {};
         const s = data.schoolRecords || {};
 
+        // ========== Hàm an toàn để gán giá trị ==========
+        const safeSet = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.value = value || "";
+        };
+
         // ==================== 1️⃣ Thông tin cá nhân ====================
-        document.getElementById("name").value = p.fullname || "";
-        document.getElementById("dob").value = p.dob || "";
-        document.getElementById("gender").value = p.gender || "";
-        document.getElementById("email").value = p.email || "";
-        document.getElementById("ethnicity").value = p.ethnicity || "";
-        document.getElementById("religion").value = p.religion || "";
-        document.getElementById("identity").value = p.identity || "";
-        document.getElementById("issueDate").value = p.issueDate || "";
-        document.getElementById("issuedBy").value = p.issuedBy || "";
-        document.getElementById("address").value = p.address || "";
-        document.getElementById("studentPhone").value = p.studentPhone || "";
-        document.getElementById("parentPhone").value = p.parentPhone || "";
-        document.getElementById("provinceCode").value = p.provinceCode || "";
-        document.getElementById("province").value = p.province || "";
-        document.getElementById("district").value = p.district || "";
-        document.getElementById("ward").value = p.ward || "";
-        document.getElementById("village").value = p.village || "";
+        safeSet("name", p.fullname);
+        safeSet("dob", p.dob);
+        safeSet("gender", p.gender);
+        safeSet("email", p.email);
+        safeSet("ethnicity", p.ethnicity);
+        safeSet("religion", p.religion);
+        safeSet("identity", p.identity);
+        safeSet("issueDate", p.issueDate);
+        safeSet("issuedBy", p.issuedBy);
+        safeSet("address", p.address);
+        safeSet("studentPhone", p.studentPhone);
+        safeSet("parentPhone", p.parentPhone);
+        safeSet("provinceCode", p.provinceCode);
+        safeSet("ward", p.ward);
+        safeSet("village", p.village);
 
-        // ==================== 2️⃣ Trường học lớp 10 ====================
-        if (s.grade10) {
-            document.getElementById("schoolProvince10").value = s.grade10.province || "";
-            document.getElementById("schoolName10").value = s.grade10.schoolName || "";
-            document.getElementById("schoolProvinceCode10").value = s.grade10.provinceCode || "";
-            document.getElementById("schoolCode10").value = s.grade10.schoolCode || "";
-            document.getElementById("schoolDistrict10").value = s.grade10.district || "";
-            document.getElementById("districtCode10").value = s.grade10.districtCode || "";
+        // ✅ Cập nhật danh sách huyện
+        const provinceSelect = document.getElementById("province");
+        const districtSelect = document.getElementById("district");
+        if (provinceSelect && districtSelect) {
+            provinceSelect.value = p.province || "";
+            updateDistrictOptions(provinceSelect, districtSelect, p.district);
         }
 
-        // ==================== 3️⃣ Trường học lớp 11 ====================
-        if (s.grade11) {
-            document.getElementById("schoolProvince11").value = s.grade11.province || "";
-            document.getElementById("schoolName11").value = s.grade11.schoolName || "";
-            document.getElementById("schoolProvinceCode11").value = s.grade11.provinceCode || "";
-            document.getElementById("schoolCode11").value = s.grade11.schoolCode || "";
-            document.getElementById("schoolDistrict11").value = s.grade11.district || "";
-            document.getElementById("districtCode11").value = s.grade11.districtCode || "";
-        }
-
-        // ==================== 4️⃣ Trường học lớp 12 ====================
-        if (s.grade12) {
-            document.getElementById("schoolProvince12").value = s.grade12.province || "";
-            document.getElementById("schoolName12").value = s.grade12.schoolName || "";
-            document.getElementById("schoolProvinceCode12").value = s.grade12.provinceCode || "";
-            document.getElementById("schoolCode12").value = s.grade12.schoolCode || "";
-            document.getElementById("schoolDistrict12").value = s.grade12.district || "";
-            document.getElementById("districtCode12").value = s.grade12.districtCode || "";
-        }
+        // ==================== 2️⃣ Lớp 10 ====================
+        if (s.grade10) fillSchoolData(s.grade10, "10");
+        // ==================== 3️⃣ Lớp 11 ====================
+        if (s.grade11) fillSchoolData(s.grade11, "11");
+        // ==================== 4️⃣ Lớp 12 ====================
+        if (s.grade12) fillSchoolData(s.grade12, "12");
 
         console.log("✅ Dữ liệu đã tải:", data);
     } catch (error) {
         console.error("❌ Lỗi khi tải dữ liệu:", error);
-        alert("Không thể tải dữ liệu. Vui lòng thử lại!");
+        alert("Không thể tải dữ liệu. Kiểm tra console để xem lỗi chi tiết.");
     }
 }
 
-// ==================== Gọi khi tải trang ====================
+// ==================== Hàm cập nhật trường học ====================
+function fillSchoolData(grade, num) {
+    const safeSet = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.value = value || "";
+    };
+
+    safeSet(`schoolProvinceCode${num}`, grade.provinceCode);
+    safeSet(`schoolName${num}`, grade.schoolName);
+    safeSet(`schoolCode${num}`, grade.schoolCode);
+    safeSet(`districtCode${num}`, grade.districtCode);
+
+    const pSel = document.getElementById(`schoolProvince${num}`);
+    const dSel = document.getElementById(`schoolDistrict${num}`);
+    if (pSel && dSel) {
+        pSel.value = grade.province || "";
+        updateDistrictOptions(pSel, dSel, grade.district);
+    }
+}
+
+// ==================== Hàm cập nhật danh sách huyện ====================
+function updateDistrictOptions(provinceSelect, districtSelect, selectedDistrict = "") {
+    const province = provinceSelect.value;
+    const list = districts[province] || [];
+
+    districtSelect.innerHTML = "<option value=''>-- Chọn quận/huyện --</option>";
+    list.forEach((d) => {
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d;
+        if (d === selectedDistrict) opt.selected = true;
+        districtSelect.appendChild(opt);
+    });
+}
+
+// ==================== Khi tải trang ====================
 window.addEventListener("DOMContentLoaded", loadStudentProfile);
