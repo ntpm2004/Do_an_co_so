@@ -1,102 +1,41 @@
 // Hàm hiển thị thông báo
 function showNotification(message) {
-    alert(message); // Thay thế bằng một thông báo tùy chỉnh nếu muốn
-}
-// Hàm lưu nguyện vọng
-function saveWishes() {
-    const loggedInCmnd = localStorage.getItem('loggedInCmnd'); // Lấy CCCD đã lưu sau khi đăng nhập
-    if (!loggedInCmnd) {
-        showNotification('Vui lòng đăng nhập trước khi lưu nguyện vọng');
-        return;
-    }
-
-    const wishes = [];
-    const sections = document.querySelectorAll('.section');
-    
-    sections.forEach(section => {
-        const majorSelect = section.querySelector('select[id^="major"]');
-        const blockSelect = section.querySelector('select[id^="block"]');
-        wishes.push({
-            major: majorSelect.value,
-            block: blockSelect.value
-        });
-    });
-
-    // Tạo khóa duy nhất cho nguyện vọng dựa trên CCCD
-    const storageKey_Nvong = `wishes_data_${loggedInCmnd}`;
-
-    // Lưu dữ liệu vào localStorage
-    localStorage.setItem(storageKey_Nvong, JSON.stringify(wishes));
-    showNotification('Nguyện vọng đã được lưu thành công!');
-    
-    // Đổi chữ nút lưu thành ĐÃ LƯU và vô hiệu hóa
-    //const saveButton_Wishes = document.getElementById('save_wishes');
-    //saveButton_Wishes.textContent = 'ĐÃ LƯU';
-    //saveButton_Wishes.disabled = true;
-}
-// Hàm tải nguyện vọng
-function loadWishes() {
-    const loggedInCmnd = localStorage.getItem('loggedInCmnd'); // Lấy CCCD đã lưu sau khi đăng nhập
-    if (!loggedInCmnd) {
-        showNotification('Vui lòng đăng nhập để xem nguyện vọng.');
-        return;
-    }
-
-    // Tạo khóa duy nhất cho nguyện vọng dựa trên CCCD
-    const storageKey_Nvong = `wishes_data_${loggedInCmnd}`;
-    const savedData_Nvong = localStorage.getItem(storageKey_Nvong);
-
-    if (savedData_Nvong) {
-        savedData_Nvong.forEach((wish, index) => {
-            if (index < 3) { // Chỉ tải tối đa 3 nguyện vọng
-                const currentWish = document.getElementById(`wish-${index + 1}`);
-                const majorSelect = currentWish.querySelector('select[id^="major"]');
-                const blockSelect = currentWish.querySelector('select[id^="block"]');
-                majorSelect.value = wish.major;
-                
-                // Cập nhật danh sách tổ hợp xét tuyển dựa trên ngành đã chọn
-                updateBlocks(majorSelect, blockSelect);
-                
-                // Gán giá trị tổ hợp đã lưu
-                blockSelect.value = wish.block;
-            }
-        });
-}}
-
-// Biến kiểm tra xem thông tin đã được lưu hay chưa
-let isSavedwish = false;
-
-// Hàm để kiểm tra xem thông tin đã được lưu chưa từ Local Storage
-function checkIfSavedwish() {
-    const savedata_ttin = localStorage.getItem(`wishes_data_${loggedInCmnd}`);
-    if (savedata_ttin) {
-        isSaved = true;
-		//document.getElementById('deleteWishbutton').style.display = 'none';
-		//document.getElementById('deleteWishbutton').disabled = true; // Vô hiệu hóa nút
-		//document.getElementById('addWishBtn').style.display = 'none'; // Đổi văn bản nút
-        //document.getElementById('save_nguyen_vong').textContent = 'ĐÃ LƯU'; // Đổi văn bản nút
-        //document.getElementById('save_nguyen_vong').disabled = true; // Vô hiệu hóa nút
-    }
+	alert(message); // Thay thế bằng một thông báo tùy chỉnh nếu muốn
 }
 
-
-// Gắn sự kiện lưu với nút lưu nguyện vọng
-document.getElementById('save_nguyen_vong').addEventListener('click', function(event) {
-	event.preventDefault(); // Ngăn chặn hành động gửi form mặc định
-    saveWishes();
-});
-
-// Tải nguyện vọng khi trang được tải
-window.onload = function() {
-    if (localStorage.getItem('loggedInCmnd')) {
-        loadReportCard(); 
-    }
-};
 let wishCount = 3; // Đếm số nguyện vọng hiện tại
-  // Gán sự kiện cho nút "Thêm nguyện vọng"
-  document.getElementById('addWishBtn').addEventListener('click', function(event) {
+// Gán sự kiện cho nút "Thêm nguyện vọng"
+document.getElementById('addWishBtn').addEventListener('click', function (event) {
 	event.preventDefault(); // Ngăn chặn hành vi mặc định nếu nút nằm trong một form
 	addWish(); // Gọi hàm thêm nguyện vọng
+});
+
+// ==================== Sự kiện khi DOM đã sẵn sàng ====================
+window.addEventListener("DOMContentLoaded", () => {
+	const addWishBtn = document.getElementById("addWishBtn");
+	if (addWishBtn) {
+		addWishBtn.addEventListener("click", (event) => {
+			event.preventDefault();
+			addWish();
+		});
+	}
+
+	// Khởi tạo các nguyện vọng có sẵn
+	document.querySelectorAll(".section").forEach((section) => {
+		const selectMajor = section.querySelector('select[id^="major"]');
+		const selectBlock = section.querySelector('select[id^="block"]');
+		updateBlocks(selectMajor, selectBlock);
+	});
+
+	// Lắng nghe sự thay đổi ngành → cập nhật tổ hợp
+	document.addEventListener("change", (event) => {
+		if (event.target.matches('select[id^="major"]')) {
+			const selectMajor = event.target;
+			const index = selectMajor.id.replace("major", "");
+			const selectBlock = document.getElementById(`block${index}`);
+			updateBlocks(selectMajor, selectBlock);
+		}
+	});
 });
 
 function deleteWish(wishId) {
@@ -105,9 +44,9 @@ function deleteWish(wishId) {
 		wishElement.remove();
 		updateWishes();
 	}
-	}
-	
-	function updateWishes() {
+}
+
+function updateWishes() {
 	const sections = document.querySelectorAll('.section');
 	sections.forEach((section, index) => {
 		const header = section.querySelector('.section-header span:first-child');
@@ -120,18 +59,18 @@ function deleteWish(wishId) {
 	});
 	wishCount = sections.length; // Cập nhật số lượng nguyện vọng
 	document.getElementById('message').textContent = ""; // Xóa thông báo
-	}
-	
-	function addWish() {
+}
+
+function addWish() {
 	if (wishCount >= 3) {
 		document.getElementById('message').textContent = "Chỉ được tối đa 3 nguyện vọng!";
 		return;
 	}
-wishCount++;
-const newWish = document.createElement('div');
-newWish.classList.add('section');
-newWish.id = `wish-${wishCount}`;
-newWish.innerHTML = `
+	wishCount++;
+	const newWish = document.createElement('div');
+	newWish.classList.add('section');
+	newWish.id = `wish-${wishCount}`;
+	newWish.innerHTML = `
 	<div class="section-header">
 		<span>Nguyện vọng ${wishCount}</span>
 		<span class="delete-button" id="deleteWishbutton" onclick="deleteWish('wish-${wishCount}')">🗑️</span>
@@ -204,10 +143,10 @@ newWish.innerHTML = `
 `;
 	document.body.appendChild(newWish); // Thêm nguyện vọng vào body
 	document.getElementById('message').textContent = ""; // Xóa thông báo
-    // Cập nhật khối ngành cho nguyện vọng mới
-    const selectMajor = newWish.querySelector(`select[id="major${wishCount}"]`);
-    const selectBlock = newWish.querySelector(`select[id="block${wishCount}"]`);
-    updateBlocks(selectMajor, selectBlock);
+	// Cập nhật khối ngành cho nguyện vọng mới
+	const selectMajor = newWish.querySelector(`select[id="major${wishCount}"]`);
+	const selectBlock = newWish.querySelector(`select[id="block${wishCount}"]`);
+	updateBlocks(selectMajor, selectBlock);
 }
 const blocks = {
 	'Công Nghệ Sinh Học': ['A00 (Toán, Vật lý, Hóa học)', 'B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
@@ -264,53 +203,53 @@ const blocks = {
 	'Kỹ Thuật Phục Hồi Chức Năng': ['A02 (Toán, Vật lý, Sinh học)', 'B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
 	'Kỹ Thuật Xét Nghiệm Y Học': ['A02 (Toán, Vật lý, Sinh học)', 'B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
 	'Kỹ Thuật Hình Ảnh Y Học': ['A02 (Toán, Vật lý, Sinh học)', 'B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
-	'Y Khoa': ['A00 (Toán, Vật lý, Hóa học)','B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
-	'Răng Hàm Mặt': ['A00 (Toán, Vật lý, Hóa học)','B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
+	'Y Khoa': ['A00 (Toán, Vật lý, Hóa học)', 'B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
+	'Răng Hàm Mặt': ['A00 (Toán, Vật lý, Hóa học)', 'B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
 	'Quản Lý Bệnh Viện': ['A00 (Toán, Vật lý, Hóa học)', 'A01 (Toán, Vật lý, Tiếng Anh)', 'B00 (Toán, Hóa học, Sinh học)', 'D01 (Ngữ văn, Toán, Tiếng Anh)'],
-	'Y Học Cổ Truyền': ['A00 (Toán, Vật lý, Hóa học)','B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
+	'Y Học Cổ Truyền': ['A00 (Toán, Vật lý, Hóa học)', 'B00 (Toán, Hóa học, Sinh học)', 'B08 (Toán, Sinh học, Tiếng Anh)', 'D07 (Toán, Hóa học, Tiếng Anh)'],
 }
 function updateBlocks(selectMajor, selectBlock) {
-    const selectedMajor = selectMajor.value;
-    const blockOptions = blocks[selectedMajor] || []; // Lấy tổ hợp tương ứng với ngành đã chọn
-    selectBlock.innerHTML = ''; // Xóa các tùy chọn trước đó
+	const selectedMajor = selectMajor.value;
+	const blockOptions = blocks[selectedMajor] || []; // Lấy tổ hợp tương ứng với ngành đã chọn
+	selectBlock.innerHTML = ''; // Xóa các tùy chọn trước đó
 
-    blockOptions.forEach((block) => {
-        const option = document.createElement('option');
-        option.value = block;
-        option.textContent = block;
-        selectBlock.appendChild(option);
-    });
+	blockOptions.forEach((block) => {
+		const option = document.createElement('option');
+		option.value = block;
+		option.textContent = block;
+		selectBlock.appendChild(option);
+	});
 }
 
 // Thiết lập cho các nguyện vọng hiện tại
 document.querySelectorAll('.section').forEach((section) => {
-    const selectMajor = section.querySelector('select[id^="major"]');
-    const selectBlock = section.querySelector('select[id^="block"]');
-    updateBlocks(selectMajor, selectBlock);
+	const selectMajor = section.querySelector('select[id^="major"]');
+	const selectBlock = section.querySelector('select[id^="block"]');
+	updateBlocks(selectMajor, selectBlock);
 });
 
 // Lắng nghe sự thay đổi của lựa chọn ngành
-document.addEventListener('change', function(event) {
-    if (event.target.matches('select[id^="major"]')) {
-        const selectMajor = event.target;
-       const selectBlock = document.querySelector(`#block${selectMajor.id.replace('major', '')}`);
-       updateBlocks(selectMajor, selectBlock);
-    }
+document.addEventListener('change', function (event) {
+	if (event.target.matches('select[id^="major"]')) {
+		const selectMajor = event.target;
+		const selectBlock = document.querySelector(`#block${selectMajor.id.replace('major', '')}`);
+		updateBlocks(selectMajor, selectBlock);
+	}
 });
 
 // Lắng nghe sự kiện thay đổi ngành để cập nhật tổ hợp xét tuyển
 document.querySelectorAll('.section').forEach((section) => {
-    const majorSelect = section.querySelector('select[id^="major"]');
-    const blockSelect = section.querySelector('select[id^="block"]');
+	const majorSelect = section.querySelector('select[id^="major"]');
+	const blockSelect = section.querySelector('select[id^="block"]');
 
-    // Gọi hàm cập nhật khi ngành được thay đổi
-    majorSelect.addEventListener('change', function(event) {
+	// Gọi hàm cập nhật khi ngành được thay đổi
+	majorSelect.addEventListener('change', function (event) {
 		event.preventDefault(); // Ngăn chặn hành động gửi form mặc định
-        updateBlocks(majorSelect, blockSelect);
-    });
+		updateBlocks(majorSelect, blockSelect);
+	});
 
-    // Khởi tạo danh sách tổ hợp xét tuyển dựa trên ngành hiện tại (nếu có)
-    updateBlocks(majorSelect, blockSelect);
+	// Khởi tạo danh sách tổ hợp xét tuyển dựa trên ngành hiện tại (nếu có)
+	updateBlocks(majorSelect, blockSelect);
 });
 
 
