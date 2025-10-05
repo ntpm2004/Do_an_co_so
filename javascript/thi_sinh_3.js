@@ -75,6 +75,7 @@ function addWish() {
 		<label for="major${wishCount}">Ngành/Chương trình đăng ký xét tuyển</label>
 		<div class="select-group">
 			<select id="major${wishCount}">
+				<option value="">Chọn ngành</option>
 				<option value="Công Nghệ Sinh Học">Công Nghệ Sinh Học</option>
 				<option value="Kỹ Thuật Hóa Học">Kỹ Thuật Hóa Học</option>
 				<option value="Kỹ Thuật Điều Khiển và Tự Động Hóa">Kỹ Thuật Điều Khiển và Tự Động Hóa</option>
