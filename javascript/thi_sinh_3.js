@@ -5,10 +5,6 @@ function showNotification(message) {
 
 let wishCount = 3; // Đếm số nguyện vọng hiện tại
 // Gán sự kiện cho nút "Thêm nguyện vọng"
-document.getElementById('addWishBtn').addEventListener('click', function (event) {
-	event.preventDefault(); // Ngăn chặn hành vi mặc định nếu nút nằm trong một form
-	addWish(); // Gọi hàm thêm nguyện vọng
-});
 
 // ==================== Sự kiện khi DOM đã sẵn sàng ====================
 window.addEventListener("DOMContentLoaded", () => {
@@ -141,7 +137,7 @@ function addWish() {
 		</div>
 	</div>
 `;
-	document.body.appendChild(newWish); // Thêm nguyện vọng vào body
+	document.getElementById('wish-container').appendChild(newWish);
 	document.getElementById('message').textContent = ""; // Xóa thông báo
 	// Cập nhật khối ngành cho nguyện vọng mới
 	const selectMajor = newWish.querySelector(`select[id="major${wishCount}"]`);
