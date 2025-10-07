@@ -107,3 +107,80 @@ function updateDistrictOptions(provinceSelect, districtSelect, selectedDistrict 
 
 // ==================== Khi tải trang ====================
 window.addEventListener("DOMContentLoaded", loadStudentProfile);
+
+// ==================== Load học bạ ====================
+async function loadSchoolRecords() {
+    const uid = sessionStorage.getItem("uid");
+    if (!uid) {
+        alert("❌ Bạn chưa đăng nhập!");
+        window.location.href = "index.html";
+        return;
+    }
+
+    try {
+        const ref = doc(db, "schoolRecords", uid);
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) {
+            console.warn("⚠️ Chưa có dữ liệu học bạ!");
+            return;
+        }
+
+        const data = snap.data();
+        const subjects = [
+            "toan", "ly", "hoa", "sinh", "van", "su", "dia", "anh",
+            "gdcd", "nhat", "trung", "han"
+        ];
+
+        // Gán điểm vào input
+        subjects.forEach((subject) => {
+            if (data[subject]) {
+                document.getElementById(`${subject}_ky1_lop11`).value = data[subject].lop11_ky1 || "";
+                document.getElementById(`${subject}_ky2_lop11`).value = data[subject].lop11_ky2 || "";
+                document.getElementById(`${subject}_ky1_lop12`).value = data[subject].lop12_ky1 || "";
+            }
+        });
+
+        console.log("✅ Học bạ đã được tải lên form!");
+    } catch (error) {
+        console.error("❌ Lỗi khi tải học bạ:", error);
+        alert("Không thể tải học bạ. Vui lòng thử lại!");
+    }
+}
+
+// ==================== Gọi thêm khi tải trang ====================
+window.addEventListener("DOMContentLoaded", loadSchoolRecords);
+
+async function loadAspirations() {
+    const uid = sessionStorage.getItem("uid");
+    if (!uid) return;
+
+    try {
+        const snap = await getDoc(doc(db, "aspirations", uid));
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+        const wishes = data.wishes || [];
+
+        wishes.forEach((wish, index) => {
+            const majorEl = document.getElementById(`major${index + 1}`);
+            const blockEl = document.getElementById(`block${index + 1}`);
+
+            if (majorEl && blockEl) {
+                // 1️⃣ Gán ngành
+                majorEl.value = wish.major || "";
+
+                // 2️⃣ Cập nhật tổ hợp tương ứng với ngành đó
+                updateBlocks(majorEl, blockEl);
+
+                // 3️⃣ Sau khi danh sách tổ hợp đã được cập nhật → gán lại giá trị block
+                blockEl.value = wish.block || "";
+            }
+        });
+    } catch (error) {
+        console.error("❌ Lỗi khi load nguyện vọng:", error);
+    }
+}
+
+// Chạy khi tải trang
+window.addEventListener("DOMContentLoaded", loadAspirations);
