@@ -166,109 +166,47 @@ th {
     background-color: #f4f4f4;
 }
 
-/* Modal overlay */
 .modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  overflow-y: auto;
 }
 
-/* Nội dung chính */
 .modal-content {
-    background: #fff;
-    width: 60%;
-    max-height: 85vh;
-    overflow-y: auto;
-    border-radius: 12px;
-    padding: 30px 40px;
-    position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 0.3s ease;
+  background: #fff;
+  margin: 50px auto;
+  padding: 20px 30px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 900px;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Nút đóng */
 .close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 28px;
-    cursor: pointer;
-    color: #666;
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
 }
 
-.close-btn:hover {
-    color: #000;
-}
-
-/* Tiêu đề */
-.modal-content h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 22px;
-}
-
-/* Các phần */
 .modal-section {
-    margin-bottom: 25px;
-    border-top: 1px solid #ddd;
-    padding-top: 15px;
+  margin-top: 20px;
 }
 
-.modal-section h3 {
-    color: #444;
-    margin-bottom: 10px;
-}
-
-/* Lưới thông tin */
 .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 10px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
 }
 
-.info-grid p {
-    margin: 0;
-    background: #f9f9f9;
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-}
-
-/* Bảng học bạ */
 .scrollable-table {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
-.scrollable-table table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.scrollable-table th,
-.scrollable-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-}
-
-.scrollable-table th {
-    background: #f1f1f1;
-}
-
-/* Hiệu ứng mở */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }

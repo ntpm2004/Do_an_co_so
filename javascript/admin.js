@@ -124,3 +124,107 @@ document.addEventListener("DOMContentLoaded", async function () {
         displayStudents(window.allStudents || []);
     };
 });
+    // ==================== Xem chi tiết thí sinh ====================
+    document.addEventListener("click", async (e) => {
+    if (!e.target.classList.contains("view-button")) return;
+
+    const uid = e.target.dataset.uid;
+    if (!uid) return;
+
+    const modal = document.getElementById("student-modal");
+    const closeBtn = modal.querySelector(".close-btn");
+
+    // Hiện modal
+    modal.style.display = "block";
+
+    // Đóng modal
+    closeBtn.onclick = () => (modal.style.display = "none");
+    window.onclick = (event) => {
+        if (event.target === modal) modal.style.display = "none";
+    };
+
+    try {
+        // ======= Lấy dữ liệu Firestore =======
+        const studentSnap = await getDoc(doc(db, "students", uid));
+        const recordSnap = await getDoc(doc(db, "schoolRecords", uid));
+        const aspirationSnap = await getDoc(doc(db, "aspirations", uid));
+
+        if (!studentSnap.exists()) return;
+        const data = studentSnap.data() || {};
+        const p = data.personalInfo || {};
+        const s = data.schoolRecords || {};
+
+        const set = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val || "";
+        };
+
+        // === 1️⃣ Thông tin cá nhân ===
+        set("m-fullname", p.fullname);
+        set("m-gender", p.gender);
+        set("m-dob", p.dob);
+        set("m-email", p.email);
+        set("m-ethnicity", p.ethnicity);
+        set("m-religion", p.religion);
+
+        // === 2️⃣ CCCD ===
+        set("m-identity", p.identity);
+        set("m-issueDate", p.issueDate);
+        set("m-issuedBy", p.issuedBy);
+
+        // === 3️⃣ Địa chỉ liên hệ ===
+        set("m-province", p.province);
+        set("m-district", p.district);
+        set("m-ward", p.ward);
+        set("m-village", p.village);
+        set("m-studentPhone", p.studentPhone);
+        set("m-parentPhone", p.parentPhone);
+
+        // === 4️⃣ Thông tin trường học ===
+        const schoolName = (grade) =>
+            grade ? `${grade.schoolName || ""} (${grade.district || ""}, ${grade.province || ""})` : "—";
+        set("m-school10", schoolName(s.grade10));
+        set("m-school11", schoolName(s.grade11));
+        set("m-school12", schoolName(s.grade12));
+
+        // === 5️⃣ Học bạ ===
+        if (recordSnap.exists()) {
+            const rec = recordSnap.data();
+            const tbody = document.getElementById("m-transcript");
+            tbody.innerHTML = "";
+            const subjects = [
+                "toan", "ly", "hoa", "sinh", "van", "su", "dia", "anh", "gdcd", "nhat", "trung", "han"
+            ];
+            subjects.forEach(sub => {
+                if (rec[sub]) {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${sub.toUpperCase()}</td>
+                        <td>${rec[sub].lop11_ky1 || ""}</td>
+                        <td>${rec[sub].lop11_ky2 || ""}</td>
+                        <td>${rec[sub].lop12_ky1 || ""}</td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            });
+        }
+
+        // === 6️⃣ Nguyện vọng ===
+        if (aspirationSnap.exists()) {
+            const data = aspirationSnap.data();
+            const wishes = data.wishes || [];
+            const ul = document.getElementById("m-wishes");
+            ul.innerHTML = "";
+            wishes.forEach((w, i) => {
+                const li = document.createElement("li");
+                li.textContent = `Nguyện vọng ${i + 1}: ${w.major || ""} - Tổ hợp: ${w.block || ""}`;
+                ul.appendChild(li);
+            });
+        }
+
+        console.log(`✅ Đã hiển thị chi tiết thí sinh ${uid}`);
+    } catch (error) {
+        console.error("❌ Lỗi khi xem chi tiết:", error);
+        alert("Không thể tải chi tiết thí sinh!");
+    }    
+});
