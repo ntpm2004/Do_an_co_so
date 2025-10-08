@@ -879,26 +879,11 @@
 				<div class="message" id="message"></div>
 			</form>
 		</div>
-		<div class="form-container1">
-			<div class="container">
-				<form id="minh_chung">
-					<div class="upload-section">
-						<h3>Upload ảnh minh chứng CCCD</h3>
-						<label for="cccd-front-upload">Ảnh mặt trước CCCD:</label>
-						<input type="file" id="cccd-front-upload" accept="image/*"><br>
-						<div id="cccd-front-preview" class="image-preview"></div>
-
-						<label for="cccd-back-upload">Ảnh mặt sau CCCD:</label>
-						<input type="file" id="cccd-back-upload" accept="image/*"><br>
-						<div id="cccd-back-preview" class="image-preview"></div>
-
-						<h3>Upload ảnh hoặc tài liệu học bạ</h3>
-						<label for="hoc-ba-upload">Học bạ (ảnh hoặc PDF):</label>
-						<input type="file" id="hoc-ba-upload" accept="image/*,.pdf" multiple><br>
-						<div id="hoc-ba-preview" class="image-preview"></div>
-					</div>
-				</form>
-			</div>
+		<div class="status-section">
+    		<h3>Trạng thái hồ sơ của bạn</h3>
+    			<div id="status-box" class="status-box">
+        		<p id="student-status">Đang tải trạng thái...</p>
+    			</div>
 		</div>
 	</div>
 
@@ -934,6 +919,8 @@
 	<script src="./javascript/thi_sinh_2.js"></script>
 	<script src="./javascript/thi_sinh_3.js"></script>
 	<script src="./javascript/thi_sinh_4.js"></script>
+	<script type="module" src="./javascript/student-status.js"></script>
+
 </body>
 
 </html>

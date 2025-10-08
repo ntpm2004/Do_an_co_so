@@ -252,3 +252,32 @@
 		.footer .icon {
     		margin-right: 5px;
 		}
+        .status-box {
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #ffffff; /* 🔹 Nền trắng */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 🔹 Bóng nhẹ cho nổi */
+}
+
+/* Tùy trạng thái */
+.status-approved {
+    color: #0a7f2e;
+    border: 2px solid #0a7f2e;
+    background-color: #ffffff; /* giữ nền trắng để dễ đọc */
+}
+
+.status-rejected {
+    color: #b30000;
+    border: 2px solid #b30000;
+    background-color: #ffffff;
+}
+
+.status-pending {
+    color: #ff8c00;
+    border: 2px solid #ff8c00;
+    background-color: #ffffff;
+}
+

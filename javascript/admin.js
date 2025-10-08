@@ -4,13 +4,17 @@ import {
     getDocs,
     getDoc,
     doc,
-    collection
+    collection,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // ==================== Sự kiện đăng xuất ====================
 document.querySelector(".signout-btn")?.addEventListener("click", () => {
     window.location.href = "dang_nhap_dang_ky.html";
 });
+
+// ==================== Biến toàn cục ====================
+let currentUID = null;
 
 // ==================== Khi tải trang ====================
 document.addEventListener("DOMContentLoaded", async function () {
@@ -30,28 +34,30 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const row = document.createElement("tr");
             row.innerHTML = `
-				<td>${index + 1}</td>
-				<td>${name || "Chưa có tên"}</td>
-				<td>${cmnd || "Không có"}</td>
-				<td>${phone || "Không có"}</td>
-				<td>
-					<table>
-						${wishes?.length
-                    ? wishes.map(w => `<tr><td>${w.major}</td></tr>`).join("")
-                    : "<tr><td>Không có nguyện vọng</td></tr>"
-                }
-					</table>
-				</td>
-				<td>
-					<table>
-						${wishes?.length
-                    ? wishes.map((_, i) => `<tr><td>${i + 1}</td></tr>`).join("")
-                    : "<tr><td>Không có</td></tr>"
-                }
-					</table>
-				</td>
-				<td><button class="view-button" data-uid="${uid}">Xem</button></td>
-			`;
+                <td>${index + 1}</td>
+                <td>${name || "Chưa có tên"}</td>
+                <td>${cmnd || "Không có"}</td>
+                <td>${phone || "Không có"}</td>
+                <td>
+                    <table>
+                        ${
+                            wishes?.length
+                                ? wishes.map(w => `<tr><td>${w.major}</td></tr>`).join("")
+                                : "<tr><td>Không có nguyện vọng</td></tr>"
+                        }
+                    </table>
+                </td>
+                <td>
+                    <table>
+                        ${
+                            wishes?.length
+                                ? wishes.map((_, i) => `<tr><td>${i + 1}</td></tr>`).join("")
+                                : "<tr><td>Không có</td></tr>"
+                        }
+                    </table>
+                </td>
+                <td><button class="view-button" data-uid="${uid}">Xem</button></td>
+            `;
             studentList.appendChild(row);
         });
     }
@@ -124,30 +130,27 @@ document.addEventListener("DOMContentLoaded", async function () {
         displayStudents(window.allStudents || []);
     };
 });
-    // ==================== Xem chi tiết thí sinh ====================
-    document.addEventListener("click", async (e) => {
+
+// ==================== Xem chi tiết thí sinh ====================
+document.addEventListener("click", async (e) => {
     if (!e.target.classList.contains("view-button")) return;
 
-    const uid = e.target.dataset.uid;
-    if (!uid) return;
+    currentUID = e.target.dataset.uid; // ✅ lưu UID hiện tại
 
     const modal = document.getElementById("student-modal");
     const closeBtn = modal.querySelector(".close-btn");
 
-    // Hiện modal
     modal.style.display = "block";
 
-    // Đóng modal
     closeBtn.onclick = () => (modal.style.display = "none");
     window.onclick = (event) => {
         if (event.target === modal) modal.style.display = "none";
     };
 
     try {
-        // ======= Lấy dữ liệu Firestore =======
-        const studentSnap = await getDoc(doc(db, "students", uid));
-        const recordSnap = await getDoc(doc(db, "schoolRecords", uid));
-        const aspirationSnap = await getDoc(doc(db, "aspirations", uid));
+        const studentSnap = await getDoc(doc(db, "students", currentUID));
+        const recordSnap = await getDoc(doc(db, "schoolRecords", currentUID));
+        const aspirationSnap = await getDoc(doc(db, "aspirations", currentUID));
 
         if (!studentSnap.exists()) return;
         const data = studentSnap.data() || {};
@@ -180,7 +183,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         set("m-studentPhone", p.studentPhone);
         set("m-parentPhone", p.parentPhone);
 
-        // === 4️⃣ Thông tin trường học ===
+        // === 4️⃣ Trường học ===
         const schoolName = (grade) =>
             grade ? `${grade.schoolName || ""} (${grade.district || ""}, ${grade.province || ""})` : "—";
         set("m-school10", schoolName(s.grade10));
@@ -192,9 +195,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const rec = recordSnap.data();
             const tbody = document.getElementById("m-transcript");
             tbody.innerHTML = "";
-            const subjects = [
-                "toan", "ly", "hoa", "sinh", "van", "su", "dia", "anh", "gdcd", "nhat", "trung", "han"
-            ];
+            const subjects = ["toan", "ly", "hoa", "sinh", "van", "su", "dia", "anh", "gdcd", "nhat", "trung", "han"];
             subjects.forEach(sub => {
                 if (rec[sub]) {
                     const tr = document.createElement("tr");
@@ -222,9 +223,27 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         }
 
-        console.log(`✅ Đã hiển thị chi tiết thí sinh ${uid}`);
+        console.log(`✅ Đã hiển thị chi tiết thí sinh ${currentUID}`);
     } catch (error) {
         console.error("❌ Lỗi khi xem chi tiết:", error);
         alert("Không thể tải chi tiết thí sinh!");
-    }    
+    }
 });
+
+// ==================== Duyệt / Từ chối hồ sơ ====================
+const approveBtn = document.getElementById("approve-btn");
+const rejectBtn = document.getElementById("reject-btn");
+
+if (approveBtn && rejectBtn) {
+    approveBtn.addEventListener("click", async () => {
+        if (!currentUID) return alert("Chưa chọn thí sinh.");
+        await updateDoc(doc(db, "students", currentUID), { status: "approved" });
+        alert("✅ Hồ sơ đã được duyệt");
+    });
+
+    rejectBtn.addEventListener("click", async () => {
+        if (!currentUID) return alert("Chưa chọn thí sinh.");
+        await updateDoc(doc(db, "students", currentUID), { status: "rejected" });
+        alert("❌ Hồ sơ đã bị từ chối");
+    });
+}
