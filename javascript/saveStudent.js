@@ -11,16 +11,8 @@ function getCurrentUID() {
     return uid || null;
 }
 
-// ==================== Lưu thông tin cá nhân ====================
-async function savePersonalInfo(e) {
-    e.preventDefault();
-
-    const uid = getCurrentUID();
-    if (!uid) {
-        alert("❌ Bạn chưa đăng nhập!");
-        return (window.location.href = "index.html");
-    }
-
+// ==================== Hàm lưu thông tin cá nhân ====================
+async function savePersonalInfoOnly(uid) {
     const personalInfo = {
         fullname: document.getElementById("name").value.trim(),
         dob: document.getElementById("dob").value,
@@ -68,18 +60,10 @@ async function savePersonalInfo(e) {
         }
     };
 
-    try {
-        await setDoc(doc(db, "students", uid), { personalInfo, schoolRecords }, { merge: true });
-        alert("✅ Đã lưu thông tin thí sinh và học bạ thành công!");
-    } catch (error) {
-        console.error("❌ Lỗi khi lưu thông tin:", error);
-        alert("Không thể lưu thông tin. Vui lòng thử lại!");
-    }
+    await setDoc(doc(db, "students", uid), { personalInfo, schoolRecords }, { merge: true });
 }
 
-document.getElementById("savePersonalInfo")?.addEventListener("click", savePersonalInfo);
-
-// ==================== Lưu học bạ chi tiết ====================
+// ==================== Học bạ chi tiết ====================
 function collectSchoolRecords() {
     const subjects = ["toan", "ly", "hoa", "sinh", "van", "su", "dia", "anh", "gdcd", "nhat", "trung", "han"];
     const record = {};
@@ -89,95 +73,70 @@ function collectSchoolRecords() {
         const ky2_11 = document.getElementById(`${subject}_ky2_lop11`);
         const ky1_12 = document.getElementById(`${subject}_ky1_lop12`);
 
-        // 🔹 Kiểm tra ô trống
         if (!ky1_11.value || !ky2_11.value || !ky1_12.value) {
             alert(`⚠️ Vui lòng nhập đầy đủ điểm cho môn "${subject.toUpperCase()}"!`);
             throw new Error("Thiếu dữ liệu");
         }
 
-        // 🔹 Chuyển sang số và kiểm tra hợp lệ
         const v1 = parseFloat(ky1_11.value);
         const v2 = parseFloat(ky2_11.value);
         const v3 = parseFloat(ky1_12.value);
 
-        if ([v1, v2, v3].some((v) => isNaN(v) || v < 0 || v > 10)) {
+        if ([v1, v2, v3].some(v => isNaN(v) || v < 0 || v > 10)) {
             alert(`⚠️ Điểm môn "${subject.toUpperCase()}" phải từ 0 đến 10!`);
             throw new Error("Dữ liệu không hợp lệ");
         }
 
-        record[subject] = {
-            lop11_ky1: v1,
-            lop11_ky2: v2,
-            lop12_ky1: v3
-        };
+        record[subject] = { lop11_ky1: v1, lop11_ky2: v2, lop12_ky1: v3 };
     }
 
     return record;
 }
 
-// ==================== Lưu học bạ lên Firestore ====================
-document.getElementById("saveSchoolRecords")?.addEventListener("click", async () => {
-    try {
-        const uid = getCurrentUID();
-        if (!uid) {
-            alert("⚠️ Bạn cần đăng nhập trước khi lưu học bạ!");
-            return;
-        }
+async function saveSchoolRecordsOnly(uid) {
+    const recordData = collectSchoolRecords();
+    await setDoc(doc(db, "schoolRecords", uid), recordData, { merge: true });
+}
 
-        const recordData = collectSchoolRecords(); // có kiểm tra nhập đủ
-
-        await setDoc(doc(db, "schoolRecords", uid), recordData, { merge: true });
-
-        alert("✅ Học bạ đã được lưu thành công!");
-    } catch (error) {
-        if (error.message !== "Thiếu dữ liệu" && error.message !== "Dữ liệu không hợp lệ") {
-            console.error("❌ Lỗi khi lưu học bạ:", error);
-            alert("Không thể lưu học bạ. Vui lòng thử lại!");
-        }
-    }
-});
-
-// ==================== Lưu nguyện vọng ====================
-async function saveAspirations(e) {
-    e?.preventDefault();
-
-    const uid = getCurrentUID(); // ✅ Dùng hàm chung
-    if (!uid) {
-        alert("⚠️ Bạn cần đăng nhập trước khi lưu nguyện vọng!");
-        return (window.location.href = "index.html");
-    }
-
+// ==================== Nguyện vọng ====================
+async function saveAspirationsOnly(uid) {
     const wishes = [];
-
-    // Duyệt qua tất cả các nguyện vọng đang có trong form
     const sections = document.querySelectorAll("#wish-container .section");
+
     sections.forEach((section, index) => {
         const major = section.querySelector(`select[id^='major']`)?.value || "";
         const block = section.querySelector(`select[id^='block']`)?.value || "";
 
         if (major.trim() !== "") {
-            wishes.push({
-                order: index + 1,
-                major,
-                block
-            });
+            wishes.push({ order: index + 1, major, block });
         }
     });
 
     if (wishes.length === 0) {
         alert("⚠️ Bạn chưa chọn ngành nào để lưu!");
-        return;
+        throw new Error("Không có nguyện vọng");
+    }
+
+    await setDoc(doc(db, "aspirations", uid), { wishes }, { merge: true });
+}
+
+// ==================== Nút lưu tất cả ====================
+document.getElementById("saveAllData")?.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const uid = getCurrentUID();
+
+    if (!uid) {
+        alert("❌ Bạn chưa đăng nhập!");
+        return (window.location.href = "index.html");
     }
 
     try {
-        // 🔹 Lưu vào Firestore collection "aspirations"
-        await setDoc(doc(db, "aspirations", uid), { wishes }, { merge: true });
-        alert("✅ Đã lưu nguyện vọng thành công!");
+        await savePersonalInfoOnly(uid);
+        await saveSchoolRecordsOnly(uid);
+        await saveAspirationsOnly(uid);
+        alert("✅ Đã lưu toàn bộ dữ liệu thành công!");
     } catch (error) {
-        console.error("❌ Lỗi khi lưu nguyện vọng:", error);
-        alert("Không thể lưu nguyện vọng. Vui lòng thử lại!");
+        console.error("❌ Lỗi khi lưu dữ liệu:", error);
+        alert("Đã xảy ra lỗi khi lưu dữ liệu. Vui lòng kiểm tra lại!");
     }
-}
-
-// ==================== Gán sự kiện ====================
-document.getElementById("saveAspirations")?.addEventListener("click", saveAspirations);
+});
