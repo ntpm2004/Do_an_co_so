@@ -1,249 +1,258 @@
 // ==================== Import Firebase ====================
 import { db } from "./firebase-config.js";
 import {
-    getDocs,
-    getDoc,
-    doc,
-    collection,
-    updateDoc
+  getDocs, getDoc, doc, collection, updateDoc, setDoc
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-// ==================== Sự kiện đăng xuất ====================
+// ==================== Đăng xuất ====================
 document.querySelector(".signout-btn")?.addEventListener("click", () => {
-    window.location.href = "dang_nhap_dang_ky.html";
+  window.location.href = "dang_nhap_dang_ky.html";
 });
 
-// ==================== Biến toàn cục ====================
 let currentUID = null;
 
 // ==================== Khi tải trang ====================
 document.addEventListener("DOMContentLoaded", async function () {
-    const studentList = document.getElementById("student-list");
+  const studentList = document.getElementById("student-list");
 
-    // ==================== Hàm hiển thị danh sách ====================
-    function displayStudents(students) {
-        studentList.innerHTML = "";
-
-        if (students.length === 0) {
-            alert("Không tìm thấy sinh viên.");
-            return;
-        }
-
-        students.forEach((student, index) => {
-            const { uid, name, cmnd, phone, wishes } = student;
-
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${name || "Chưa có tên"}</td>
-                <td>${cmnd || "Không có"}</td>
-                <td>${phone || "Không có"}</td>
-                <td>
-                    <table>
-                        ${
-                            wishes?.length
-                                ? wishes.map(w => `<tr><td>${w.major}</td></tr>`).join("")
-                                : "<tr><td>Không có nguyện vọng</td></tr>"
-                        }
-                    </table>
-                </td>
-                <td>
-                    <table>
-                        ${
-                            wishes?.length
-                                ? wishes.map((_, i) => `<tr><td>${i + 1}</td></tr>`).join("")
-                                : "<tr><td>Không có</td></tr>"
-                        }
-                    </table>
-                </td>
-                <td><button class="view-button" data-uid="${uid}">Xem</button></td>
-            `;
-            studentList.appendChild(row);
-        });
+  function displayStudents(students) {
+    studentList.innerHTML = "";
+    if (!students.length) {
+      alert("Không tìm thấy sinh viên.");
+      return;
     }
+    students.forEach((student, index) => {
+      const { uid, name, cmnd, phone, wishes } = student;
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${name || "Chưa có tên"}</td>
+        <td>${cmnd || "Không có"}</td>
+        <td>${phone || "Không có"}</td>
+        <td>
+          <table>
+            ${wishes?.length ? wishes.map(w => `<tr><td>${w.major}</td></tr>`).join("") : "<tr><td>Không có nguyện vọng</td></tr>"}
+          </table>
+        </td>
+        <td>
+          <table>
+            ${wishes?.length ? wishes.map((_, i) => `<tr><td>${i + 1}</td></tr>`).join("") : "<tr><td>Không có</td></tr>"}
+          </table>
+        </td>
+        <td><button class="view-button" data-uid="${uid}">Xem</button></td>
+      `;
+      studentList.appendChild(row);
+    });
+  }
 
-    // ==================== Hàm tải dữ liệu từ Firebase ====================
-    async function loadAllStudents() {
-        const students = [];
-
-        try {
-            const querySnapshot = await getDocs(collection(db, "students"));
-
-            for (const docSnap of querySnapshot.docs) {
-                const data = docSnap.data();
-                const personal = data.personalInfo || {};
-                const uid = docSnap.id;
-
-                // Lấy thêm nguyện vọng nếu có
-                let wishes = [];
-                const aspSnap = await getDoc(doc(db, "aspirations", uid));
-                if (aspSnap.exists()) {
-                    wishes = aspSnap.data().wishes || [];
-                }
-
-                students.push({
-                    uid,
-                    name: personal.fullname || "",
-                    cmnd: personal.identity || "",
-                    phone: personal.studentPhone || "",
-                    wishes
-                });
-            }
-
-            displayStudents(students);
-            window.allStudents = students; // lưu tạm để tìm kiếm
-        } catch (err) {
-            console.error("❌ Lỗi tải danh sách:", err);
-            alert("Không thể tải danh sách sinh viên từ Firestore.");
-        }
-    }
-
-    await loadAllStudents();
-
-    // ==================== Tìm kiếm ====================
-    const filterForm = document.querySelector(".filter-form form");
-    filterForm.onsubmit = function (event) {
-        event.preventDefault();
-
-        const name = document.getElementById("ho-ten").value.toLowerCase();
-        const cmnd = document.getElementById("cmnd").value.trim();
-        const phone = document.getElementById("sdt").value.trim();
-        const major = document.getElementById("nganh").value;
-
-        const filtered = window.allStudents.filter((s) => {
-            const matchesName = !name || s.name.toLowerCase().includes(name);
-            const matchesCMND = !cmnd || s.cmnd.includes(cmnd);
-            const matchesPhone = !phone || s.phone.includes(phone);
-            const matchesMajor = !major || s.wishes.some(w => w.major === major);
-            return matchesName && matchesCMND && matchesPhone && matchesMajor;
-        });
-
-        displayStudents(filtered);
-    };
-
-    // ==================== Reset ====================
-    document.querySelector(".reset-btn").onclick = function () {
-        document.getElementById("ho-ten").value = "";
-        document.getElementById("cmnd").value = "";
-        document.getElementById("sdt").value = "";
-        document.getElementById("nganh").value = "";
-        displayStudents(window.allStudents || []);
-    };
-});
-
-// ==================== Xem chi tiết thí sinh ====================
-document.addEventListener("click", async (e) => {
-    if (!e.target.classList.contains("view-button")) return;
-
-    currentUID = e.target.dataset.uid; // ✅ lưu UID hiện tại
-
-    const modal = document.getElementById("student-modal");
-    const closeBtn = modal.querySelector(".close-btn");
-
-    modal.style.display = "block";
-
-    closeBtn.onclick = () => (modal.style.display = "none");
-    window.onclick = (event) => {
-        if (event.target === modal) modal.style.display = "none";
-    };
-
+  async function loadAllStudents() {
+    const students = [];
     try {
-        const studentSnap = await getDoc(doc(db, "students", currentUID));
-        const recordSnap = await getDoc(doc(db, "schoolRecords", currentUID));
-        const aspirationSnap = await getDoc(doc(db, "aspirations", currentUID));
-
-        if (!studentSnap.exists()) return;
-        const data = studentSnap.data() || {};
+      const querySnapshot = await getDocs(collection(db, "students"));
+      for (const docSnap of querySnapshot.docs) {
+        const data = docSnap.data();
         const p = data.personalInfo || {};
-        const s = data.schoolRecords || {};
+        const uid = docSnap.id;
 
-        const set = (id, val) => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = val || "";
-        };
+        // Nguyện vọng
+        let wishes = [];
+        const aspSnap = await getDoc(doc(db, "aspirations", uid));
+        if (aspSnap.exists()) wishes = aspSnap.data().wishes || [];
 
-        // === 1️⃣ Thông tin cá nhân ===
-        set("m-fullname", p.fullname);
-        set("m-gender", p.gender);
-        set("m-dob", p.dob);
-        set("m-email", p.email);
-        set("m-ethnicity", p.ethnicity);
-        set("m-religion", p.religion);
-
-        // === 2️⃣ CCCD ===
-        set("m-identity", p.identity);
-        set("m-issueDate", p.issueDate);
-        set("m-issuedBy", p.issuedBy);
-
-        // === 3️⃣ Địa chỉ liên hệ ===
-        set("m-province", p.province);
-        set("m-district", p.district);
-        set("m-ward", p.ward);
-        set("m-village", p.village);
-        set("m-studentPhone", p.studentPhone);
-        set("m-parentPhone", p.parentPhone);
-
-        // === 4️⃣ Trường học ===
-        const schoolName = (grade) =>
-            grade ? `${grade.schoolName || ""} (${grade.district || ""}, ${grade.province || ""})` : "—";
-        set("m-school10", schoolName(s.grade10));
-        set("m-school11", schoolName(s.grade11));
-        set("m-school12", schoolName(s.grade12));
-
-        // === 5️⃣ Học bạ ===
-        if (recordSnap.exists()) {
-            const rec = recordSnap.data();
-            const tbody = document.getElementById("m-transcript");
-            tbody.innerHTML = "";
-            const subjects = ["toan", "ly", "hoa", "sinh", "van", "su", "dia", "anh", "gdcd", "nhat", "trung", "han"];
-            subjects.forEach(sub => {
-                if (rec[sub]) {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>${sub.toUpperCase()}</td>
-                        <td>${rec[sub].lop11_ky1 || ""}</td>
-                        <td>${rec[sub].lop11_ky2 || ""}</td>
-                        <td>${rec[sub].lop12_ky1 || ""}</td>
-                    `;
-                    tbody.appendChild(tr);
-                }
-            });
-        }
-
-        // === 6️⃣ Nguyện vọng ===
-        if (aspirationSnap.exists()) {
-            const data = aspirationSnap.data();
-            const wishes = data.wishes || [];
-            const ul = document.getElementById("m-wishes");
-            ul.innerHTML = "";
-            wishes.forEach((w, i) => {
-                const li = document.createElement("li");
-                li.textContent = `Nguyện vọng ${i + 1}: ${w.major || ""} - Tổ hợp: ${w.block || ""}`;
-                ul.appendChild(li);
-            });
-        }
-
-        console.log(`✅ Đã hiển thị chi tiết thí sinh ${currentUID}`);
-    } catch (error) {
-        console.error("❌ Lỗi khi xem chi tiết:", error);
-        alert("Không thể tải chi tiết thí sinh!");
+        students.push({
+          uid,
+          name: p.fullname || "",
+          cmnd: p.identity || "",
+          phone: p.studentPhone || "",
+          wishes
+        });
+      }
+      displayStudents(students);
+      window.allStudents = students;
+    } catch (err) {
+      console.error("❌ Lỗi tải danh sách:", err);
+      alert("Không thể tải danh sách sinh viên.");
     }
+  }
+
+  await loadAllStudents();
+
+  // ==================== Tìm kiếm ====================
+  const filterForm = document.querySelector(".filter-form form");
+  filterForm.onsubmit = (event) => {
+    event.preventDefault();
+    const name = document.getElementById("ho-ten").value.toLowerCase();
+    const cmnd = document.getElementById("cmnd").value.trim();
+    const phone = document.getElementById("sdt").value.trim();
+    const major = document.getElementById("nganh").value;
+
+    const filtered = (window.allStudents || []).filter((s) => {
+      const matchesName = !name || s.name.toLowerCase().includes(name);
+      const matchesCMND = !cmnd || s.cmnd.includes(cmnd);
+      const matchesPhone = !phone || s.phone.includes(phone);
+      const matchesMajor = !major || s.wishes.some(w => w.major === major);
+      return matchesName && matchesCMND && matchesPhone && matchesMajor;
+    });
+
+    displayStudents(filtered);
+  };
+
+  // ==================== Reset ====================
+  document.querySelector(".reset-btn").onclick = function () {
+    document.getElementById("ho-ten").value = "";
+    document.getElementById("cmnd").value = "";
+    document.getElementById("sdt").value = "";
+    document.getElementById("nganh").value = "";
+    displayStudents(window.allStudents || []);
+  };
 });
 
-// ==================== Duyệt / Từ chối hồ sơ ====================
+// ==================== Xem chi tiết ====================
+document.addEventListener("click", async (e) => {
+  if (!e.target.classList.contains("view-button")) return;
+
+  currentUID = e.target.dataset.uid;
+
+  const modal = document.getElementById("student-modal");
+  const closeBtn = modal.querySelector(".close-btn");
+  modal.style.display = "block";
+  closeBtn.onclick = () => (modal.style.display = "none");
+  window.onclick = (event) => { if (event.target === modal) modal.style.display = "none"; };
+
+  try {
+    const studentSnap = await getDoc(doc(db, "students", currentUID));
+    const recordSnap = await getDoc(doc(db, "schoolRecords", currentUID));
+    const aspirationSnap = await getDoc(doc(db, "aspirations", currentUID));
+
+    if (!studentSnap.exists()) return;
+
+    const data = studentSnap.data() || {};
+    const p = data.personalInfo || {};
+    const s = data.schoolRecords || {};
+
+    const set = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = (val ?? val === 0) ? val : "—";
+    };
+
+    // 1) Thông tin cá nhân
+    set("m-fullname", p.fullname);
+    set("m-gender", p.gender);
+    set("m-dob", p.dob);
+    set("m-email", p.email);
+    set("m-ethnicity", p.ethnicity);
+    set("m-religion", p.religion);
+
+    // 2) CCCD
+    set("m-identity", p.identity);
+    set("m-issueDate", p.issueDate);
+    set("m-issuedBy", p.issuedBy);
+
+    // 3) Liên hệ
+    set("m-address", p.address);
+    set("m-province", p.province);
+    set("m-district", p.district);
+    set("m-ward", p.ward);
+    set("m-village", p.village);
+    set("m-studentPhone", p.studentPhone);
+    set("m-parentPhone", p.parentPhone);
+
+    // 4) Trường học
+    const schoolName = (grade) => grade ? `${grade.schoolName || ""} (${grade.district || ""}, ${grade.province || ""})` : "—";
+    set("m-school10", schoolName(s.grade10));
+    set("m-school11", schoolName(s.grade11));
+    set("m-school12", schoolName(s.grade12));
+
+    // 5) Học bạ
+    if (recordSnap.exists()) {
+      const rec = recordSnap.data();
+      const tbody = document.getElementById("m-transcript");
+      tbody.innerHTML = "";
+      const subjects = ["toan", "ly", "hoa", "sinh", "van", "su", "dia", "anh", "gdcd", "nhat", "trung", "han"];
+      subjects.forEach(sub => {
+        if (rec[sub]) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${sub.toUpperCase()}</td>
+            <td>${rec[sub].lop11_ky1 || ""}</td>
+            <td>${rec[sub].lop11_ky2 || ""}</td>
+            <td>${rec[sub].lop12_ky1 || ""}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+      });
+    }
+
+    // 6) Nguyện vọng
+    const wishUl = document.getElementById("m-wishes");
+    if (wishUl) {
+      wishUl.innerHTML = "";
+      if (aspirationSnap.exists()) {
+        const a = aspirationSnap.data();
+        const wishes = a.wishes || [];
+        wishes.forEach((w, i) => {
+          const li = document.createElement("li");
+          li.textContent = `Nguyện vọng ${i + 1}: ${w.major || ""} - Tổ hợp: ${w.block || ""}`;
+          wishUl.appendChild(li);
+        });
+      }
+    }
+  } catch (error) {
+    console.error("❌ Lỗi khi xem chi tiết:", error);
+    alert("Không thể tải chi tiết thí sinh!");
+  }
+});
+
+// ==================== DUYỆT / TỪ CHỐI ====================
 const approveBtn = document.getElementById("approve-btn");
 const rejectBtn = document.getElementById("reject-btn");
 
 if (approveBtn && rejectBtn) {
-    approveBtn.addEventListener("click", async () => {
-        if (!currentUID) return alert("Chưa chọn thí sinh.");
-        await updateDoc(doc(db, "students", currentUID), { status: "approved" });
-        alert("✅ Hồ sơ đã được duyệt");
+  // ✅ DUYỆT
+  approveBtn.addEventListener("click", async () => {
+    if (!currentUID) return alert("⚠️ Chưa chọn thí sinh.");
+    if (!confirm("Xác nhận duyệt hồ sơ này?")) return;
+
+    await updateDoc(doc(db, "students", currentUID), {
+      status: "approved",
+      reviewStatus: "approved",
+      rejectReasons: {},
+      rejectReasonText: "",
+      invalidFields: [],
+      reason: ""
     });
 
-    rejectBtn.addEventListener("click", async () => {
-        if (!currentUID) return alert("Chưa chọn thí sinh.");
-        await updateDoc(doc(db, "students", currentUID), { status: "rejected" });
-        alert("❌ Hồ sơ đã bị từ chối");
-    });
+    alert("✅ Hồ sơ đã được duyệt!");
+  });
+
+  // ❌ TỪ CHỐI (ghi đè cơ chế cũ)
+  rejectBtn.addEventListener("click", async () => {
+    if (!currentUID) return alert("⚠️ Chưa chọn thí sinh.");
+
+    const reason = prompt("Nhập lý do từ chối:");
+    if (!reason) return alert("⚠️ Bạn phải nhập lý do.");
+
+    const invalidInput = prompt("Nhập ID các trường sai (vd: email, issueDate, identity):");
+    const rejectReasons = {};
+    if (invalidInput) {
+      invalidInput.split(",").map(x => x.trim()).filter(Boolean)
+        .forEach(id => rejectReasons[id] = "incorrect");
+    }
+
+    try {
+      await setDoc(doc(db, "students", currentUID), {
+        status: "rejected",
+        reviewStatus: "rejected",
+        rejectReasonText: reason,
+        rejectReasons,     // dùng cơ chế mới
+        invalidFields: [], // vô hiệu hóa legacy
+        reason: ""         // tránh nhầm field legacy
+      }, { merge: true });
+
+      alert("❌ Hồ sơ đã bị từ chối và lưu lý do thành công!");
+    } catch (err) {
+      console.error("❌ Lỗi lưu:", err);
+      alert("Không thể lưu thông tin từ chối!");
+    }
+  });
 }
